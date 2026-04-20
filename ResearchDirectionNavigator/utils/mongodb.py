@@ -22,14 +22,17 @@ def get_mongodb_config():
 
 # create a function to check if the mongodb connection is successful
 def check_mongodb_connection():
-    try:
-        config=get_mongodb_config()
-        client=MongoClient(config["uri"], serverSelectionTimeoutMS=3000)
-        client.admin.command("ping")
-        client.close()
-        return True
-    except PyMongoError:
-        return False
+    mongodb_config = get_mongodb_config()
+
+    mongodb_client = MongoClient(
+        mongodb_config["uri"],
+        serverSelectionTimeoutMS=3000
+    )
+
+    mongodb_client.admin.command("ping")
+    mongodb_client.close()
+
+    return True
 
 # w05-create a function to count publications by year for papers based on searching keywords in MongoDB
 def w05_get_research_trends_based_on_publication_numbers_with_year(keywords: str, limit: int=100):
@@ -43,10 +46,10 @@ def w05_get_research_trends_based_on_publication_numbers_with_year(keywords: str
         return []
     # if the input text is not empty, we can split the keywords by comma and strip the whitespace
     keyword_list=[keyword.strip() for keyword in input_text.split(",") if keyword.strip()]
-    # if the list is still empty after split, retyrn []
+    # if the list is still empty after split, return []
     if not keyword_list:
         return []
-    # use first token only；与 MySQL 侧 LIKE %keyword% 一致，用子串不区分大小写匹配 keywords.name
+    # use only the first token; case-insensitive substring match on keywords.name (aligned with MySQL LIKE %keyword%)
     first_keyword=keyword_list[0]
     pattern=re.escape(first_keyword)
     # load the same configuration from get_mongodb_config()
@@ -76,9 +79,9 @@ def w05_get_research_trends_based_on_publication_numbers_with_year(keywords: str
 
     return rows[:limit]
 
-# 示意：按 Neo4j 给出的关键词名集合 K 做按年发文量
+# W5: yearly publication counts for papers whose keywords intersect name set K from Neo4j
 def w05_get_research_trends_by_keyword_name_set(keyword_names, limit=100):
-    """按 Neo4j 给出的关键词名集合 K，在 publications 上按 year 聚合（示意，非生产级）"""
+    """Aggregate publications by year where keyword names are in set K from Neo4j (demo-oriented, not production-hardened)."""
     if not keyword_names:
         return []
     if not check_mongodb_connection():

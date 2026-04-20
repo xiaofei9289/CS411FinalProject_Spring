@@ -40,23 +40,57 @@ def build_university_list_for_widget02(university_data):
     # three distinct light backgrounds 
     summary_card_backgrounds=("#e3ecf4", "#e5f2ee", "#f4efe8")
 
-    # create three small cards in one horizontal strip
-    summary_cards=dbc.Row([
-        dbc.Col(dbc.Card(dbc.CardBody([
-            html.H6("Total Publications"),
-            html.H4(str(total_publications))
-        ]), style={"backgroundColor": summary_card_backgrounds[0]}), md=4),
-
-        dbc.Col(dbc.Card(dbc.CardBody([
-            html.H6("Major Research Area"),
-            html.P(primary_research_area)
-        ]), style={"backgroundColor": summary_card_backgrounds[1]}), md=4),
-
-        dbc.Col(dbc.Card(dbc.CardBody([
-            html.H6("Number of Faculty"),
-            html.H4(str(faculty_count))
-        ]), style={"backgroundColor": summary_card_backgrounds[2]}), md=4),
-    ])
+    # create three small cards
+    summary_cards=dbc.Row(
+        [
+            dbc.Col(
+                dbc.Card(
+                    dbc.CardBody(
+                        [
+                            html.H6("Total Publications"),
+                            html.H4(str(total_publications)),
+                        ],
+                        className="h-100 d-flex flex-column justify-content-center",
+                    ),
+                    className="h-100 border-0",
+                    style={"backgroundColor": summary_card_backgrounds[0]},
+                ),
+                md=4,
+                className="d-flex",
+            ),
+            dbc.Col(
+                dbc.Card(
+                    dbc.CardBody(
+                        [
+                            html.H6("Major Research Area"),
+                            html.P(primary_research_area, className="mb-0"),
+                        ],
+                        className="h-100 d-flex flex-column justify-content-center",
+                    ),
+                    className="h-100 border-0",
+                    style={"backgroundColor": summary_card_backgrounds[1]},
+                ),
+                md=4,
+                className="d-flex",
+            ),
+            dbc.Col(
+                dbc.Card(
+                    dbc.CardBody(
+                        [
+                            html.H6("Number of Faculty"),
+                            html.H4(str(faculty_count)),
+                        ],
+                        className="h-100 d-flex flex-column justify-content-center",
+                    ),
+                    className="h-100 border-0",
+                    style={"backgroundColor": summary_card_backgrounds[2]},
+                ),
+                md=4,
+                className="d-flex",
+            ),
+        ],
+        className="g-3 align-items-stretch mb-3",
+    )
 
     # build chart
     # check if it is empty
@@ -88,7 +122,7 @@ def build_university_list_for_widget02(university_data):
         chart
     ])
 
-
+# define a function to builds the layout of Widget 02 in the dashboard
 # the column for widget 2 is about the university research profile
 def build_column_widget02(dropdown_options):
     return dbc.Col(

@@ -18,14 +18,14 @@ def get_neo4j_driver():
         )
     return GraphDatabase.driver(uri, auth=(user, password))
 
-#xxxxxxxxxxxx
+
+# W5: count INTERESTED_IN edges from the given faculty nodes to keywords (schema uses FACULTY, INTERESTED_IN, KEYWORD).
 def w05_neo4j_interested_in_stats_for_faculty_ids(list_of_faculty_ids_from_mysql):
 
     if not list_of_faculty_ids_from_mysql:
         return {"edge_count": 0, "detail": "no faculty ids from MySQL"}
 
     driver=get_neo4j_driver()
-    # 图数据库中学术世界模型使用大写标签/关系类型（FACULTY, INTERESTED_IN, KEYWORD）
     cypher="""
         MATCH (f:FACULTY)-[r:INTERESTED_IN]->(k:KEYWORD)
         WHERE f.id IN $ids
@@ -37,9 +37,10 @@ def w05_neo4j_interested_in_stats_for_faculty_ids(list_of_faculty_ids_from_mysql
     driver.close()
     return {"edge_count": cnt}
 
-#xxxxxxxxxxxx
+
+# W5: rank keywords by how many distinct faculty (from the MySQL-filtered id set) share each keyword via INTERESTED_IN.
 def w05_neo4j_keywords_ranked_by_faculty_overlap(neo4j_faculty_ids, cap=500):
-    """在 MySQL 筛出的教师集合上，按兴趣关键词与群体的重合度排序：命中教师数越多越靠前。"""
+    """Rank keywords by overlap count: more faculty in the set interested in a keyword means higher rank."""
     if not neo4j_faculty_ids:
         return []
     driver=get_neo4j_driver()

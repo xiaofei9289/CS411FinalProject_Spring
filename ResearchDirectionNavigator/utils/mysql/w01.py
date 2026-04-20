@@ -1,5 +1,3 @@
-"""Widget 1 — keyword / publication search."""
-
 import mysql.connector
 
 from .core import check_mysql_connection, get_mysql_config

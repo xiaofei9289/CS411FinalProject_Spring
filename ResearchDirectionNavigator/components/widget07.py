@@ -1,18 +1,21 @@
-"""Widget 7 — collaboration network (shell). Teammate implements Neo4j graph / table in results."""
-
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 
 
 def get_widget07_initial_results_children():
-    """Teammate: return graph or table after Neo4j queries."""
+    """TODO: replace this placeholder after W7 collaboration callbacks are implemented."""
     return [
         html.P(
-            "Results area — teammate will render the collaboration network here.",
+            "TODO: W7 collaboration network is not implemented yet.",
             className="text-muted small mb-0",
         ),
     ]
 
+# TODO: implement W7 callbacks and Neo4j data access for collaboration networks.
+
+
+
+# define a function to builds the layout of Widget 07 in the dashboard
 # the column for widget 07 is about the collaboration network
 def build_column_widget07():
     return dbc.Col(

@@ -1,16 +1,28 @@
 use academicworld;
 
--- non-primary-key indexes; counted under the "Indexing" database technique.
--- note: MySQL does not support "create index if not exists", so this block
--- is meant to be run **once** on a fresh database. If the indexes already
--- exist, you can safely skip re-running this file (or drop the four indexes
--- manually first).
+-- -----------------------------------------------------------------
+-- part 1: create indexes
+-- these indexes help speed up common queries in the project.
+-- idempotent: drop index if exists, then create index (safe to re-run).
+-- requires mysql 8.0+ (drop index if exists).
+-- -----------------------------------------------------------------
+drop index if exists idx_keyword_name on keyword;
 create index idx_keyword_name on keyword(name);
+
+drop index if exists idx_publication_year on publication;
 create index idx_publication_year on publication(year);
+
+drop index if exists idx_faculty_pub_faculty on faculty_publication;
 create index idx_faculty_pub_faculty on faculty_publication(faculty_id);
+
+drop index if exists idx_pub_kw_pub on publication_keyword;
 create index idx_pub_kw_pub on publication_keyword(publication_id, keyword_id);
 
-
+-- -----------------------------------------------------------------
+-- part 2: create a view for university keyword statistics
+-- this view shows how many publications are related to each keyword
+-- in each university.
+-- -----------------------------------------------------------------
 drop view if exists university_keyword_stats;
 create view university_keyword_stats as
 select
@@ -25,11 +37,11 @@ join publication_keyword pk on pk.publication_id = p.id
 join keyword k on k.id = pk.keyword_id
 group by u.id, u.name, k.id, k.name;
 
-
--- widget 9: favorite professors manager
--- the first table stores the current favorites (one row per professor).
--- the second table is an append-only audit log used together with the
--- first table inside an explicit MySQL transaction (ADD / REMOVE).
+-- -----------------------------------------------------------------
+-- part 3: create tables for widget 9
+-- favorite_professors stores the current favorite professors
+-- favorite_log stores add/remove history
+-- -----------------------------------------------------------------
 create table if not exists favorite_professors (
     id int auto_increment primary key,
     faculty_id int not null,

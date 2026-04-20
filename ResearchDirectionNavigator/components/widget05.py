@@ -378,7 +378,7 @@ def build_w05_panel(matched_faculty_count,neo4j_keyword_rows,mongo_line_chart,mo
         ]
     )
 
-
+# define a function to builds the layout of Widget 05 in the dashboard
 # the column for widget 5 is about the research trend analysis
 def build_column_widget05(initial_children):
     return dbc.Col(

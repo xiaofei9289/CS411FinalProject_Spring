@@ -16,11 +16,10 @@ from components.widget07 import build_column_widget07
 from components.widget08 import build_column_widget08
 from components.widget09 import build_column_widget09
 from components.widget10 import build_column_widget10
-from services.search_service import widget10_initial_results_children
+from services.search_service import get_widget10_initial_results
 from services.trend_service import widget05_initial_results_children
 from services.university_service import get_university_dropdown_options
 
-# construct a function for the main layout 
 """
 this function is responsible for building the main layout of the dashboard, which includes a header, 
 a sidebar for navigation, and a main content area where different pages will be displayed based on user interaction. 
@@ -35,7 +34,7 @@ the layout is:
 # Row 4 W5 Research Trends                   |  W6 Faculty Recommendation
 
 """
-
+# construct a function for the main layout 
 def build_dashboard_layout():
     # the first row contains widget 1 and widget 8
     # the widge 1 is placed in the first column and the widget 8 is placed in the second column
@@ -69,7 +68,7 @@ def build_dashboard_layout():
     # the widget 9 is placed in the second column
     column_for_widget09=build_column_widget09()
     # the widget 10 is placed in the third column
-    column_for_widget10=build_column_widget10(widget10_initial_results_children())
+    column_for_widget10=build_column_widget10(get_widget10_initial_results())
 
     # place the three columns in the third row
     third_row_for_widget07_and_widget09_and_widget10=dbc.Row(
@@ -102,15 +101,18 @@ def build_dashboard_layout():
     # return the main content area to be used in the overall layout of the dashboard
     return main_container_area_for_all_rows
 
-
+# create a function to build the full layout
 def build_full_app_layout():
+    # build the main visible sections of the page
     page_sections=[
         build_top_navigation_bar(),
         build_title_and_search_section(),
         build_dashboard_layout(),
         build_page_footer_section(),
     ]
+    # build Widget 04 extra components
     widget04_store, widget04_off_canvas_bar=create_layout_for_widget04()
+    # create a hidden placeholder button for Widget 04 pattern-matching callbacks
     w4_pattern_placeholder=html.Div(
         [
             dbc.Button(
@@ -122,6 +124,7 @@ def build_full_app_layout():
         ],
         style={"display": "none"},
     )
+    # create hidden placeholder buttons for Widget 09 pattern-matching callbacks
     w9_pattern_placeholder=html.Div(
         [
             dbc.Button(

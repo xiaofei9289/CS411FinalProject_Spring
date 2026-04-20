@@ -1,25 +1,25 @@
-// MongoDB setup for Research Direction Navigator (academicworld).
-// Run with:  mongosh academicworld sql/mongo_setup.js
-// (The database is passed on the command line, so no `use academicworld;`
-// helper is needed here — that helper is only valid in interactive mongosh.)
-// All indexes below are non-_id indexes and count toward the "Indexing" database technique.
+// this file creates indexes for the publications collection.
+// these indexes help MongoDB search data faster in Widget 5.
 
-// W5 matches publications by keyword name (regex / $in on "keywords.name")
-// and aggregates by year. These two indexes cover both steps.
+// create an index for keyword names in publications.
+// this helps when we search papers by keyword.
 db.publications.createIndex(
     { "keywords.name": 1 },
-    { name: "idx_pub_keywords_name" }
+    { name: "keyword_name_index" }
 );
 
+// create an index for the year field.
+// this helps when we count papers by year.
 db.publications.createIndex(
-    { "year": 1 },
-    { name: "idx_pub_year" }
+    { year: 1 },
+    { name: "year_index" }
 );
 
-// Compound index used when matching by keyword name first, then grouping by year.
+// Create a compound index for keyword name and year.
+// This helps when we first search by keyword and then group the matched papers by year.
 db.publications.createIndex(
-    { "keywords.name": 1, "year": 1 },
-    { name: "idx_pub_keywords_name_year" }
+    { "keywords.name": 1, year: 1 },
+    { name: "keyword_year_index" }
 );
 
 // Display the indexes so the user can verify after running the script.

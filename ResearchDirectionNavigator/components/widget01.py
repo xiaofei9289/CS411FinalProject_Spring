@@ -8,7 +8,7 @@ def get_widget01_initial_results_children():
         ),
     return widge01_discription
 
-
+# define a function to builds the layout of Widget 01 in the dashboard
 # the column for widget 1 is about the keywords and it accounts for half of the width of the page
 def build_column_widget01():
     return dbc.Col(

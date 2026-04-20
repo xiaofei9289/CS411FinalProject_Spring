@@ -1,5 +1,3 @@
-"""Widget 3 — multi-university comparison."""
-
 import mysql.connector
 
 from .core import check_mysql_connection, get_mysql_config
@@ -9,7 +7,7 @@ def w03_get_comparision_information_among_universities(selected_university_names
     # first, check if the mysql connection is successful
     if not check_mysql_connection():
         raise ConnectionError("we cannot connect to MySQL database. please check.")
-    
+
     # second check the input
     # if no university was selected, return an empty list
     if selected_university_names is None:
@@ -25,15 +23,13 @@ def w03_get_comparision_information_among_universities(selected_university_names
             selected_universites_list_without_space.append(selected_university_text_without_space)
     # get the number of selected universities
     number_of_selected_universities=len(selected_universites_list_without_space)
-    # if only one university was selected, retunr an empty list
+    # if only one university was selected, return an empty list
     if number_of_selected_universities<2:
         return []
 
-    # third, construct the placeholders in query
-    number_of_placeholders=number_of_selected_universities
-    comma_separated_palceholders=", ".join(["%s"]*number_of_placeholders)
+    # fast path: filter university with in (...) — avoids the slow wanted-union + left join plan
+    comma_separated_placeholders=", ".join(["%s"]*number_of_selected_universities)
 
-    # fourth, construct the query command
     sql_query_for_university_comparison=f"""
         select
             u.name as university_name,
@@ -60,12 +56,10 @@ def w03_get_comparision_information_among_universities(selected_university_names
         from university u
         left join faculty f on f.university_id=u.id
         left join faculty_publication fp on fp.faculty_id=f.id
-        where u.name in ({comma_separated_palceholders})
+        where u.name in ({comma_separated_placeholders})
         group by u.id, u.name
-        order by u.name
     """
 
-    # fifth, execute the query command
     db_config=mysql.connector.connect(**get_mysql_config())
     cur=db_config.cursor(dictionary=True)
     tuple_of_university_names_for_sql=tuple(selected_universites_list_without_space)
@@ -73,4 +67,22 @@ def w03_get_comparision_information_among_universities(selected_university_names
     results=cur.fetchall()
     cur.close()
     db_config.close()
-    return results
+
+    # one row per selected name (same order as multiselect): names with no university.name match
+    # get placeholder zeros so W3 still shows a table instead of a false "pick 2+" message
+    by_name={row["university_name"]: row for row in results}
+    merged=[]
+    for name in selected_universites_list_without_space:
+        if name in by_name:
+            merged.append(by_name[name])
+        else:
+            merged.append(
+                {
+                    "university_name": name,
+                    "total_publication_count": 0,
+                    "faculty_number": 0,
+                    "publication_count_last_twenty_years": 0,
+                    "total_citation_sum": 0,
+                }
+            )
+    return merged

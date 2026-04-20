@@ -1,5 +1,3 @@
-"""Widget 5 — research trends (MySQL faculty match by keyword)."""
-
 import mysql.connector
 
 from .core import check_mysql_connection, get_mysql_config

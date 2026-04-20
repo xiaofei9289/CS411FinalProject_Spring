@@ -6,14 +6,10 @@ def make_comparisions_among_universities_for_widget_03(rows):
     # check if there's data or not
     # if no data
     if rows is None:
-        message_for_None=html.P("No Data, No Results Searching")
-        return message_for_None
-    # check if the data in the list is >=2
-    # get the number of rows
+        return html.P("No comparison data available.")
     number_of_rows=len(rows)
     if number_of_rows<2:
-        message_for_list=html.P("Please Selected At Least 2 Or More Universities")
-        return message_for_list
+        return html.P("Please select at least two universities to compare.")
     
     # create the header row of the table
     header_row=html.Tr([
@@ -60,7 +56,7 @@ def make_comparisions_among_universities_for_widget_03(rows):
         table_with_frame,
     ])
 
-
+# define a function to builds the layout of Widget 03 in the dashboard
 # the column for widget 3 is about the university comparison
 # same source as W2: options for the multi-select comparison dropdown (independent variable name for W3).
 def build_column_widget03(dropdown_options):
@@ -70,7 +66,7 @@ def build_column_widget03(dropdown_options):
                 className="section-label-row",
                 children=[
                     html.Span(
-                        "UNIVERSITY COMPARISIONS",
+                        "UNIVERSITY COMPARISONS",
                         className="section-label section-label-university",
                     )
                 ],
@@ -83,7 +79,7 @@ def build_column_widget03(dropdown_options):
                         children=[
                             html.Span("W3", className="widget-tag"),
                             html.Span(
-                                "Universities' Comparision",
+                                "University Comparison",
                                 className="widget-title",
                             ),
                             html.Span("MySQL", className="tech-badge mysql"),
@@ -103,7 +99,7 @@ def build_column_widget03(dropdown_options):
                                     dcc.Dropdown(
                                         id="widget_03_university_dropdown",
                                         options=dropdown_options,
-                                        placeholder="Pick at least 2 or more universities",
+                                        placeholder="Select at least two universities",
                                         clearable=True,
                                         searchable=True,
                                         multi=True,
@@ -111,7 +107,7 @@ def build_column_widget03(dropdown_options):
                                 ],
                             ),
                             dbc.Button(
-                                "Make Comparision",
+                                "Compare",
                                 id="search_widget03_button",
                                 color="secondary",
                                 size="sm",

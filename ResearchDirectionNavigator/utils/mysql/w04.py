@@ -1,5 +1,3 @@
-"""Widget 4 — faculty profile / off-canvas."""
-
 import mysql.connector
 
 from .core import check_mysql_connection, get_mysql_config

@@ -10,8 +10,9 @@
 dash>=2.14
 dash-bootstrap-components>=1.5.0
 plotly>=5.18
-# plotly.express (used by widget charts) expects numpy at runtime
+# plotly.express uses pandas when x/y are plain sequences (e.g. W2/W5 charts)
 numpy>=1.26
+pandas>=2.0
 
 # load .env for local MySQL password (do not commit .env)
 python-dotenv>=1.0.0

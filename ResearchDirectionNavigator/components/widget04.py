@@ -116,7 +116,7 @@ def build_widget04_profile_card(profile_data):
             )
         )
 
-    # # show representative papers as an ordered list 
+    # show representative papers as an ordered list 
     if representative_paper_items:
         representative_paper_block=html.Ol(
             representative_paper_items,

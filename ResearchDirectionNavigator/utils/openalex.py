@@ -1,5 +1,6 @@
 import json
 import os
+import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -63,16 +64,37 @@ def search_openalex_works(search_text, per_page=25):
         }
     )
 
-    # send request
-    response = urllib.request.urlopen(request, timeout=35)
-    response_text = response.read().decode("utf-8")
-    data = json.loads(response_text)
+    # send request — failures become ([], error_message) so Dash callbacks stay stable
+    try:
+        with urllib.request.urlopen(request, timeout=35) as response:
+            response_text = response.read().decode("utf-8")
+        data = json.loads(response_text)
+    except urllib.error.HTTPError as e:
+        return [], f"OpenAlex HTTP {e.code}: {e.reason}"
+    except urllib.error.URLError as e:
+        reason = e.reason
+        if isinstance(reason, BaseException):
+            reason = str(reason)
+        return [], f"OpenAlex request failed: {reason}"
+    except json.JSONDecodeError:
+        return [], "OpenAlex returned invalid JSON"
+    except UnicodeDecodeError:
+        return [], "OpenAlex response could not be decoded as UTF-8"
+
+    if not isinstance(data, dict):
+        return [], "OpenAlex returned an unexpected JSON shape"
+
     # get result list from API response
     works = data.get("results", [])
+    if not isinstance(works, list):
+        works = []
+
     result_list = []
 
     # loop through each work
     for work in works:
+        if not isinstance(work, dict):
+            continue
         # get title
         title = work.get("display_name")
         if not title:
@@ -97,9 +119,15 @@ def search_openalex_works(search_text, per_page=25):
         # get author names
         author_name_list = []
         authorships = work.get("authorships", [])
+        if not isinstance(authorships, list):
+            authorships = []
 
         for authorship in authorships[:5]:
+            if not isinstance(authorship, dict):
+                continue
             author_info = authorship.get("author", {})
+            if not isinstance(author_info, dict):
+                author_info = {}
             author_name = str(author_info.get("display_name", "")).strip()
             if author_name != "":
                 author_name_list.append(author_name)

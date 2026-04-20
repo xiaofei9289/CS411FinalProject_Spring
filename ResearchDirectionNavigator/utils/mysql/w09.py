@@ -1,5 +1,3 @@
-"""Widget 9 — favorite professors (search, list, add/remove with transaction)."""
-
 import mysql.connector
 
 from .core import check_mysql_connection, get_mysql_config
@@ -57,71 +55,94 @@ def w09_list_favorites():
 
 # w09-create a function to add one favorite and write an ADD row in favorite_log inside one transaction
 def w09_add_favorite_with_transaction(faculty_id: int):
-    # first, check if the mysql connection is successful
+    # check whether MySQL is available
     if not check_mysql_connection():
         raise ConnectionError("we cannot connect to MySQL database. please check.")
-    fid=int(faculty_id)
-
-    db_config=mysql.connector.connect(**get_mysql_config())
-    cur=db_config.cursor()
+    # make sure faculty_id is an integer
+    professor_id = int(faculty_id)
+    mysql_connection = None
+    mysql_cursor = None
     try:
-        # second, start transaction and run two DML statements (favorite row + log row)
-        cur.execute("start transaction")
+        # connect to MySQL
+        mysql_connection = mysql.connector.connect(**get_mysql_config())
+        # turn off autocommit so we can control the transaction manually
+        mysql_connection.autocommit = False
 
-        # insert the favorite row; insert ignore skips when UNIQUE(faculty_id) already holds this professor
-        cur.execute(
-            "insert ignore into favorite_professors (faculty_id) values (%s)",
-            (fid,),
+        # create a cursor object to execute SQL
+        mysql_cursor = mysql_connection.cursor()
+        mysql_cursor.execute(
+            """
+            insert ignore into favorite_professors (faculty_id)
+            values (%s)
+            """,
+            (professor_id,),
         )
-        inserted_row_count=cur.rowcount
-
-        # append an audit-log row for the ADD action
-        cur.execute(
-            "insert into favorite_log (faculty_id, action) values (%s, 'ADD')",
-            (fid,),
+        # save how many rows were really inserted
+        inserted_row_count = mysql_cursor.rowcount
+        # insert one ADD action record into favorite_log
+        mysql_cursor.execute(
+            """
+            insert into favorite_log (faculty_id, action)
+            values (%s, 'ADD')
+            """,
+            (professor_id,),
         )
 
-        db_config.commit()
-        return {"ok": True, "inserted": inserted_row_count, "faculty_id": fid}
+        # commit both SQL statements together
+        mysql_connection.commit()
+        return {
+            "ok": True,
+            "inserted": inserted_row_count,
+            "faculty_id": professor_id,
+        }
     except Exception:
-        db_config.rollback()
+        if mysql_connection is not None:
+            mysql_connection.rollback()
         raise
     finally:
-        cur.close()
-        db_config.close()
+        if mysql_cursor is not None:
+            mysql_cursor.close()
+        if mysql_connection is not None:
+            mysql_connection.close()
 
 
 # w09-create a function to remove one favorite and write a REMOVE row in favorite_log inside one transaction
 def w09_remove_favorite_with_transaction(faculty_id: int):
-    # first, check if the mysql connection is successful
+    # check database connection
     if not check_mysql_connection():
         raise ConnectionError("we cannot connect to MySQL database. please check.")
-    fid=int(faculty_id)
-
-    db_config=mysql.connector.connect(**get_mysql_config())
-    cur=db_config.cursor()
+    # convert input into integer
+    faculty_id = int(faculty_id)
+    connection = None
+    cursor = None
     try:
-        # second, start transaction and run two DML statements (delete favorite + log row)
-        cur.execute("start transaction")
+        # connect to mysql
+        connection = mysql.connector.connect(**get_mysql_config())
 
-        # delete the favorite row when present
-        cur.execute(
-            "delete from favorite_professors where faculty_id=%s",
-            (fid,),
+        # use manual transaction control
+        connection.autocommit = False
+        # create cursor
+        cursor = connection.cursor()
+        # delete one row from favorite_professors
+        cursor.execute(
+            "delete from favorite_professors where faculty_id = %s",
+            (faculty_id,),
         )
-        deleted_row_count=cur.rowcount
+        deleted = cursor.rowcount
 
-        # append an audit-log row for the REMOVE action
-        cur.execute(
+        # add one log row into favorite_log
+        cursor.execute(
             "insert into favorite_log (faculty_id, action) values (%s, 'REMOVE')",
-            (fid,),
+            (faculty_id,),
         )
-
-        db_config.commit()
-        return {"ok": True, "deleted": deleted_row_count, "faculty_id": fid}
+        connection.commit()
+        return {"ok": True, "deleted": deleted, "faculty_id": faculty_id}
     except Exception:
-        db_config.rollback()
+        if connection is not None:
+            connection.rollback()
         raise
     finally:
-        cur.close()
-        db_config.close()
+        if cursor is not None:
+            cursor.close()
+        if connection is not None:
+            connection.close()

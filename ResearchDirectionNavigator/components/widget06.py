@@ -1,18 +1,21 @@
-"""Widget 6 — automatic faculty recommendation (shell). Teammate implements search logic and rich results."""
-
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 
 
 def get_widget06_initial_results_children():
-    """Teammate: return real components after MySQL/Neo4j/Mongo queries."""
+    """TODO: replace this placeholder after W6 recommendation callbacks are implemented."""
     return [
         html.P(
-            "Results area — teammate will render ranked faculty recommendations here.",
+            "TODO: W6 smart faculty recommendation is not implemented yet.",
             className="text-muted small mb-0",
         ),
     ]
 
+# TODO: implement W6 callbacks and data access for ranked faculty recommendations.
+
+
+
+# define a function to builds the layout of Widget 06 in the dashboard
 # the column for widget 06 is about the smart recommendation
 def build_column_widget06():
     """W6 column shell: same ids as before so layout and future callbacks stay valid."""

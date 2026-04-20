@@ -130,7 +130,7 @@ def build_widget10_openalex_results(works: list, query: str, error: str | None=N
         ]
     )
 
-
+# define a function to builds the layout of Widget 10 in the dashboard
 # the column for widget 10 is about the global scholarly works
 def build_column_widget10(initial_children):
     return dbc.Col(

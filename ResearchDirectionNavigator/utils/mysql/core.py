@@ -1,5 +1,3 @@
-"""Shared MySQL connection helpers (env, config, health check)."""
-
 import os
 import mysql.connector
 from pathlib import Path
@@ -22,10 +20,7 @@ def get_mysql_config():
 
 # define a function to check if the mysql connection is successful
 def check_mysql_connection():
-    try:
-        config= get_mysql_config()
-        connection=mysql.connector.connect(**config)
-        connection.close()
-        return True
-    except mysql.connector.Error:
-        return False
+    config = get_mysql_config()
+    connection = mysql.connector.connect(**config)
+    connection.close()
+    return True

@@ -1,18 +1,21 @@
-"""Widget 8 — related keywords explorer (shell). Teammate implements Neo4j keyword grid/table in results."""
-
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 
 
 def get_widget08_initial_results_children():
-    """Teammate: return keyword grid or table after Neo4j queries."""
+    """TODO: replace this placeholder after W8 related-keyword callbacks are implemented."""
     return [
         html.P(
-            "Results area — teammate will render the related-keywords table here.",
+            "TODO: W8 related keywords explorer is not implemented yet.",
             className="text-muted small mb-0",
         ),
     ]
 
+# TODO: implement W8 callbacks and Neo4j data access for related keywords.
+
+
+
+# define a function to builds the layout of Widget 08 in the dashboard
 # the column for widget 08 is about the related keywors
 def build_column_widget08():
     """W8 column shell: same ids as before so layout and future callbacks stay valid."""

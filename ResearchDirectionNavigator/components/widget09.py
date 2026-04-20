@@ -146,9 +146,8 @@ def get_widget09_initial_favorites():
     # build and return the favorite list UI
     return build_widget09_favorites_list(favorite_rows)
 
-
+# define a function to builds the layout of Widget 09 in the dashboard
 # the column for widget 9 is about the favorite professors.
-
 def build_column_widget09():
     return dbc.Col(
         children=[

@@ -15,10 +15,11 @@ body { background: #F3F4F8; color: #1F2B3A; }
   gap:24px; 
 }
 
-/* logo area (icon + text), keep them in one row and aligned center */
-.app-logo { 
+/* brand area (name + tagline), keep it aligned in the top bar */
+.app-brand { 
   display:flex; 
-  align-items:center; 
+  flex-direction: column;
+  justify-content: center;
   gap:10px; 
   font-weight:700; 
 }
@@ -80,26 +81,6 @@ body { background: #F3F4F8; color: #1F2B3A; }
   font-weight:700; 
   border-radius:999px; 
   padding:4px 10px; 
-}
-
-/* brand name (first line inside logo area) */
-.app-brand-name { 
-  font-size: 16px; 
-  font-weight: 700; 
-  line-height: 1.1; 
-}
-
-/* small tagline under brand name (second line) */
-.app-brand-tag { 
-  font-size: 11px; 
-  opacity: 0.75; 
-  margin-top: 2px; 
-}
-
-/* keep right-side area (avatar / user icon) pushed to the far right */
-.nav-right { 
-  margin-left: auto; 
-  font-size: 18px; 
 }
 
 /* ===== section labels ===== */

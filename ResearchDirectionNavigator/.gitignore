@@ -1,0 +1,31 @@
+# this is local env file, do not commit to git
+.env
+
+# virtual environment (whichever folder name the user picked)
+cs411venv/
+venv/
+.venv/
+
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# test
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+
+# macOS
+.DS_Store
+

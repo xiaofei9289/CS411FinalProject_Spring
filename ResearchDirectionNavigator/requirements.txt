@@ -1,0 +1,24 @@
+# how to use
+# 1. create a virtual environment, this is an optional step but recommended
+# command: python -m venv cs411venv
+# 2. activate the virtual environment
+# command: source cs411venv/bin/activate
+# 3. install the required packages
+
+# command: pip install -r requirements.txt 
+# the main web tools for this project are:
+dash>=2.14
+dash-bootstrap-components>=1.5.0
+plotly>=5.18
+# plotly.express (used by widget charts) expects numpy at runtime
+numpy>=1.26
+
+# load .env for local MySQL password (do not commit .env)
+python-dotenv>=1.0.0
+
+# Mysql database connector
+mysql-connector-python>=8.2
+
+# other databases connectors
+pymongo>=4.6
+neo4j>=5.14

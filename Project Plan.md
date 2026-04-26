@@ -73,12 +73,12 @@ This project is designed to help users explore research directions, discover rel
 
 ------
 
-#### Widget8：Related Keywords Explorer
+#### Widget8：Favorite Publication Manager
 
-- Database： Neo4j 
-- User Input： users can type keyword in the text box or a popular tag
-- Output： users can get the scatter/bubble-style chart of related keywords by co-occurrence strength
-- Interaction with Other Widgets：users can click a keyword in the chart, which can push that keyword to Widget1.
+- Database： MongoDB
+- User Input： users can search publications by title or keyword, click the **+** button to save a publication, update the reading status/note for a saved publication, or click the **×** button to remove it from favorites.
+- Output： users can view a saved publication list with title, year, venue, status, personal note, and edit/delete controls.
+- Interaction with Other Widgets： this widget supports insert, delete, and modify operations on favorite publications; saved publication titles can guide users back to Widget1 keyword publication search.
 
 ------
 

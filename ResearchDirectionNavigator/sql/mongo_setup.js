@@ -22,5 +22,19 @@ db.publications.createIndex(
     { name: "keyword_year_index" }
 );
 
+// Widget 8 stores saved papers in a separate collection.
+// One publication should appear only once in the favorite list.
+db.favorite_publications.createIndex(
+    { publication_id: 1 },
+    { name: "favorite_publication_unique", unique: true }
+);
+
+// This helps the favorite list load in most-recently-edited order.
+db.favorite_publications.createIndex(
+    { updated_at: -1, created_at: -1 },
+    { name: "favorite_publication_recent_index" }
+);
+
 // Display the indexes so the user can verify after running the script.
 printjson(db.publications.getIndexes());
+printjson(db.favorite_publications.getIndexes());

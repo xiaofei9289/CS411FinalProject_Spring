@@ -3,15 +3,78 @@ import dash_bootstrap_components as dbc
 
 
 def get_widget06_initial_results_children():
-    """TODO: replace this placeholder after W6 recommendation callbacks are implemented."""
     return [
         html.P(
-            "TODO: W6 smart faculty recommendation is not implemented yet.",
+            "Type a topic and tune the weights to rank faculty recommendations.",
             className="text-muted small mb-0",
         ),
     ]
 
-# TODO: implement W6 callbacks and data access for ranked faculty recommendations.
+
+def build_widget06_recommendation_results(recommendation_payload):
+    rows=recommendation_payload.get("rows") or []
+    message=recommendation_payload.get("message") or ""
+    if not rows:
+        return html.P(message or "No recommendations found.", className="text-muted small mb-0")
+    table_rows=[]
+    for rank, row in enumerate(rows, start=1):
+        faculty_id=int(row["faculty_id"])
+        faculty_name_button=dbc.Button(
+            row.get("faculty_name") or f"Faculty {faculty_id}",
+            id={"type": "w4-open-faculty", "index": faculty_id},
+            color="link",
+            className="p-0 text-start fw-semibold small",
+            n_clicks=0,
+        )
+        table_rows.append(
+            html.Tr(
+                [
+                    html.Td(str(rank)),
+                    html.Td(
+                        [
+                            faculty_name_button,
+                            html.Div(row.get("university_name") or "", className="text-muted small"),
+                        ]
+                    ),
+                    html.Td(str(row.get("graph_relevance") or 0)),
+                    html.Td(f"{row.get('keyword_relevant_citations', 0)}"),
+                    html.Td(str(row.get("recent_publication_count") or 0)),
+                    html.Td(f"{row.get('score', 0)}"),
+                ]
+            )
+        )
+    topic=recommendation_payload.get("topic") or "your topic"
+    topic_activity_total=recommendation_payload.get("topic_activity_total") or 0
+    return html.Div(
+        [
+            html.P(
+                f'MongoDB found {topic_activity_total} publication-year matches for "{topic}" as topic activity context.',
+                className="small text-muted mb-2",
+            ),
+            dbc.Table(
+                [
+                    html.Thead(
+                        html.Tr(
+                            [
+                                html.Th("#"),
+                                html.Th("Faculty"),
+                                html.Th("Neo4j relevance"),
+                                html.Th("K-citations"),
+                                html.Th("Recent"),
+                                html.Th("Score"),
+                            ]
+                        )
+                    ),
+                    html.Tbody(table_rows),
+                ],
+                bordered=True,
+                hover=True,
+                responsive=True,
+                size="sm",
+                className="mb-0 align-middle",
+            ),
+        ]
+    )
 
 
 
@@ -49,7 +112,7 @@ def build_column_widget06():
                     ),
                     html.P(
                         "Find promising professors based on topic relevance, "
-                        "publication volume, and recent activity.",
+                        "keyword-relevant citations, and recent activity.",
                         className="widget-subtitle",
                     ),
                     html.P(
@@ -75,6 +138,41 @@ def build_column_widget06():
                                 n_clicks=0,
                             ),
                         ],
+                    ),
+                    html.Div(
+                        [
+                            html.Label("Neo4j topic weight", className="small fw-semibold"),
+                            dcc.Slider(
+                                id="widget06_graph_weight",
+                                min=0,
+                                max=1,
+                                step=0.1,
+                                value=0.5,
+                                marks=None,
+                                tooltip={"placement": "bottom", "always_visible": False},
+                            ),
+                            html.Label("Keyword-relevant citation weight", className="small fw-semibold mt-2"),
+                            dcc.Slider(
+                                id="widget06_citation_weight",
+                                min=0,
+                                max=1,
+                                step=0.1,
+                                value=0.3,
+                                marks=None,
+                                tooltip={"placement": "bottom", "always_visible": False},
+                            ),
+                            html.Label("Recent activity weight", className="small fw-semibold mt-2"),
+                            dcc.Slider(
+                                id="widget06_recent_weight",
+                                min=0,
+                                max=1,
+                                step=0.1,
+                                value=0.2,
+                                marks=None,
+                                tooltip={"placement": "bottom", "always_visible": False},
+                            ),
+                        ],
+                        className="mb-3",
                     ),
                     html.Div(
                         id="widget_06_results",

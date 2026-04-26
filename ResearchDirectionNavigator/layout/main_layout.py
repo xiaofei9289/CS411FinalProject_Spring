@@ -1,4 +1,4 @@
-from dash import html
+from dash import html, dcc
 import dash_bootstrap_components as dbc
 
 from components.header import (
@@ -140,12 +140,45 @@ def build_full_app_layout():
         ],
         style={"display": "none"},
     )
+    # create hidden placeholder controls for Widget 08 pattern-matching callbacks
+    w8_pattern_placeholder=html.Div(
+        [
+            dbc.Button(
+                id={"type": "w8-add-pub", "index": "__placeholder__"},
+                n_clicks=0,
+                style={"display": "none"},
+            ),
+            dbc.Button(
+                id={"type": "w8-remove-pub", "index": "__placeholder__"},
+                n_clicks=0,
+                style={"display": "none"},
+            ),
+            dbc.Button(
+                id={"type": "w8-update-pub", "index": "__placeholder__"},
+                n_clicks=0,
+                style={"display": "none"},
+            ),
+            dcc.Textarea(
+                id={"type": "w8-note", "index": "__placeholder__"},
+                value="",
+                style={"display": "none"},
+            ),
+            dcc.Dropdown(
+                id={"type": "w8-status", "index": "__placeholder__"},
+                options=[],
+                value=None,
+                style={"display": "none"},
+            ),
+        ],
+        style={"display": "none"},
+    )
     return html.Div(
         children=[
             html.Div(children=page_sections),
             widget04_store,
             widget04_off_canvas_bar,
             w4_pattern_placeholder,
+            w8_pattern_placeholder,
             w9_pattern_placeholder,
         ],
         className="app-container",

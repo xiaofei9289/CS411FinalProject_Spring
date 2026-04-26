@@ -18,6 +18,7 @@ from .w04 import (
     w04_get_faculty_top_keywords,
 )
 from .w05 import w05_mysql_get_faculty_ids_by_keyword
+from .w06 import w06_get_faculty_candidates_by_topic
 from .w09 import (
     w09_add_favorite_with_transaction,
     w09_list_favorites,
@@ -38,6 +39,7 @@ __all__ = [
     "w04_get_faculty_top_collaborators",
     "w04_get_faculty_top_keywords",
     "w05_mysql_get_faculty_ids_by_keyword",
+    "w06_get_faculty_candidates_by_topic",
     "w09_add_favorite_with_transaction",
     "w09_list_favorites",
     "w09_remove_favorite_with_transaction",

@@ -22,18 +22,11 @@ TODO: Add the Illinois Media Space video demo link here after recording the 5-10
 | W3 | Multi-university comparison table (MySQL) |
 | W4 | Faculty profile off-canvas panel (MySQL; linked from W1, W9, etc.) |
 | W5 | Research trends: Neo4j interest overlap + MongoDB publications by year (MySQL + Neo4j + MongoDB) |
+| W6 | Smart faculty recommendation with weighted ranking (MySQL + Neo4j + MongoDB) |
+| W7 | Collaboration network graph by faculty name (Neo4j) |
+| W8 | Favorite publication manager with search, save, edit, and delete (MongoDB) |
 | W9 | Favorite professors (MySQL; transactions and constraints) |
 | W10 | OpenAlex works search with basic request-error handling (optional `OPENALEX_MAILTO`) |
-
-## Placeholder widgets
-
-W6, W7, and W8 are visible in the dashboard layout, but their callbacks and data-access functions are not implemented yet.
-
-| Area | Current status |
-|------|----------------|
-| W6 | UI shell for smart faculty recommendation |
-| W7 | UI shell for collaboration network |
-| W8 | UI shell for related keywords explorer |
 
 The page layout is defined in `layout/main_layout.py`. Widget UI lives under `components/`; orchestration is in `services/` and data access in `utils/`.
 
@@ -101,8 +94,11 @@ The app runs with Dash debug mode (`debug=True`) by default. Stop the server wit
 3. Use W2 to select one university and inspect its faculty count, publication count, major research area, and top keyword chart.
 4. Use W3 to select at least two universities and compare publication count, faculty count, recent publication count, and citation total.
 5. Use W5 to search a topic and view related keyword overlap from Neo4j together with yearly publication trends from MongoDB.
-6. Use W9 to search faculty by name, add professors to My Favorites, remove them, and open their W4 profile from the favorites list.
-7. Use W10 to search OpenAlex for external scholarly works related to a topic, title, keyword, or author.
+6. Use W6 to enter a research topic, tune ranking weights, and open recommended faculty in W4.
+7. Use W7 to search a faculty name and inspect a Neo4j coauthor network.
+8. Use W8 to search publications, save favorites, edit reading status/notes, and remove saved papers.
+9. Use W9 to search faculty by name, add professors to My Favorites, remove them, and open their W4 profile from the favorites list.
+10. Use W10 to search OpenAlex for external scholarly works related to a topic, title, keyword, or author.
 
 ## Project layout
 
@@ -141,12 +137,12 @@ The frontend is implemented with Dash and Dash Bootstrap Components. Plotly is u
 
 The backend uses the provided Academic World data across three database systems:
 
-- **MySQL** is used for publication search, university profiles, university comparison, faculty profiles, and favorite-professor updates.
-- **Neo4j** is used in W5 to rank overlapping keywords connected to faculty nodes through graph relationships.
-- **MongoDB** is used in W5 to aggregate publication counts by year from the `publications` collection.
+- **MySQL** is used for publication search, university profiles, university comparison, faculty profiles, favorite-professor updates, and W6 faculty candidate statistics.
+- **Neo4j** is used in W5 to rank overlapping keywords, W6 to score faculty topic relevance, and W7 to build collaboration networks.
+- **MongoDB** is used in W5 to aggregate publication counts by year and W8 to manage favorite publications.
 - **OpenAlex** is used as an external data source for W10 to search global scholarly works beyond the local dataset.
 
-The code is organized by widget where possible. `utils/mysql/w01.py`, `w02.py`, `w03.py`, `w04.py`, `w05.py`, and `w09.py` contain MySQL queries for the corresponding widgets. `utils/neo4j.py`, `utils/mongodb.py`, and `utils/openalex.py` contain graph, document, and external API access helpers.
+The code is organized by widget where possible. `utils/mysql/w01.py`, `w02.py`, `w03.py`, `w04.py`, `w05.py`, `w06.py`, and `w09.py` contain MySQL queries for the corresponding widgets. `utils/neo4j.py`, `utils/mongodb.py`, and `utils/openalex.py` contain graph, document, and external API access helpers.
 
 ## Database Techniques
 
@@ -159,6 +155,7 @@ The project uses several database techniques required by the course specificatio
 | Constraint | `sql/mysql_setup.sql`, `sql/neo4j_setup.cypher` | Adds a unique constraint on favorite faculty, a foreign key from favorites to faculty, and Neo4j uniqueness constraints |
 | Prepared statements | `utils/mysql/*.py` | Uses parameterized `%s` queries for user-provided input instead of string-concatenating values into SQL |
 | Transaction | `utils/mysql/w09.py` | Adds/removes favorite professors and writes audit log rows in one MySQL transaction with commit, rollback, and cleanup |
+| Insert/delete/modify | `utils/mongodb.py` | W8 inserts favorite publication documents, deletes saved publications, and modifies status/note fields in MongoDB |
 
 The W9 transaction keeps `favorite_professors` and `favorite_log` consistent. When a user adds or removes a favorite professor, the dashboard mutates the current favorite list and writes a matching log row. If either SQL statement fails, the transaction rolls back so the database does not keep a partial favorite change.
 
@@ -166,9 +163,8 @@ The W9 transaction keeps `favorite_professors` and `favorite_log` consistent. Wh
 
 - **Fresh layout on each load**: `app.layout` is a callable so the tree is rebuilt on every full page load. That keeps widgets such as W9 “My Favorites” in sync with the database after refresh.
 - **Initial MySQL dependency**: The layout loads university dropdown options and W9 favorites from MySQL. If MySQL is unreachable or `.env` is wrong, the page may fail during initial load.
-- **Databases down**: W5 depends on MySQL, Neo4j, and MongoDB. If Neo4j or MongoDB is unreachable during W5 search, that callback may error or show no trend results.
+- **Databases down**: W5 and W6 depend on multiple local databases. W5 depends on MySQL, Neo4j, and MongoDB. If one of those services is unreachable, the related callback may error or show no results.
 - **Neo4j**: If `NEO4J_PASSWORD` is unset, `utils/neo4j.py` raises a clear error when creating the driver.
-- **W6-W8**: These widgets are currently placeholders. Their buttons and result areas are present, but no callbacks are registered.
 - **Local development**: `python app.py` runs Dash with `debug=True`.
 
 ## License and course use

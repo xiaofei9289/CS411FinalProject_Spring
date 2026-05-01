@@ -1,8 +1,9 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
+from utils.common import to_int
 
-# define a function to build the OpenAlex result area for Widget 10
-def build_widget10_openalex_results(works: list, query: str, error: str | None=None):
+# build the W10 result table
+def build_widget10_openalex_results(works, query, error=None):
     search_query_for_display=(query or "").strip() or "—"
     # if there is an error message,
     if error:
@@ -33,25 +34,25 @@ def build_widget10_openalex_results(works: list, query: str, error: str | None=N
     # iterate each work returned by OpenAlex
     for work in works:
         # get the title of the current work
-        title = work.get("title")
+        title=work.get("title")
         if not title:
-            title = "—"
+            title="—"
         # get the URL of the current work
-        url = work.get("url")
+        url=work.get("url")
         if not url:
-            url = ""
+            url=""
         else:
             # remove extra spaces around the URL
-            url = url.strip()
+            url=url.strip()
 
-        if len(title) > 200:
-            shown_title = title[:200] + "…"
+        if len(title)>200:
+            shown_title=title[:200] + "…"
         else:
-            shown_title = title
+            shown_title=title
 
         # if the work has a valid URL, make the title clickable
-        if url != "":
-            title_cell = html.A(
+        if url!="":
+            title_cell=html.A(
                 shown_title,
                 href=url,
                 target="_blank",
@@ -60,30 +61,26 @@ def build_widget10_openalex_results(works: list, query: str, error: str | None=N
                 style={"color": "#2C516E"},
             )
         else:
-            title_cell = html.Span(shown_title)
+            title_cell=html.Span(shown_title)
 
         # get the publication year
-        year = work.get("year")
+        year=work.get("year")
         if year is None:
-            year_text = "—"
+            year_text="—"
         else:
-            year_text = str(year)
+            year_text=str(year)
 
         # get the citation count
-        citations = work.get("cited_by_count")
-        if citations is None:
-            citations = 0
-
-        # convert the citation count to text for display in the table
-        citation_text = str(citations)
+        citations=to_int(work.get("cited_by_count"), default=0)
+        citation_text=str(citations)
 
         # get the short author text
-        authors = work.get("authors_short")
+        authors=work.get("authors_short")
         if not authors:
-            authors = "—"
+            authors="—"
 
         # build one table row for the current work
-        one_row = html.Tr(
+        one_row=html.Tr(
             [
                 html.Td(title_cell, className="small"),
                 html.Td(year_text, className="small text-nowrap"),
@@ -96,7 +93,7 @@ def build_widget10_openalex_results(works: list, query: str, error: str | None=N
         table_body_rows.append(one_row)
 
     # build the final Bootstrap table using the header and all body rows
-    result_table = dbc.Table(
+    result_table=dbc.Table(
         [table_header_row, html.Tbody(table_body_rows)],
         bordered=True,
         hover=True,
@@ -106,7 +103,7 @@ def build_widget10_openalex_results(works: list, query: str, error: str | None=N
     )
 
     # count how many works are in the current result list
-    work_count = len(works)
+    work_count=len(works)
     # return the whole result area
     return html.Div(
         [
@@ -130,8 +127,7 @@ def build_widget10_openalex_results(works: list, query: str, error: str | None=N
         ]
     )
 
-# define a function to builds the layout of Widget 10 in the dashboard
-# the column for widget 10 is about the global scholarly works
+# W10 layout
 def build_column_widget10(initial_children):
     return dbc.Col(
         children=[
@@ -140,7 +136,7 @@ def build_column_widget10(initial_children):
                 children=[
                     html.Span(
                         "EXTERNAL DATA",
-                        className="section-label section-label-external",
+                        className="section-label section-label-pink",
                     )
                 ],
             ),

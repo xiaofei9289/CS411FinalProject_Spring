@@ -7,7 +7,6 @@ from services.search_service import (
     run_widget01_search,
 )
 
-# define a register function to register all widget 01 callbacks to the Dash app
 def register(app):
     @app.callback(
         Output("widget_01_results", "children"),
@@ -18,7 +17,7 @@ def register(app):
         prevent_initial_call=True,
     )
     
-    # define a function to update the publication results based on global or widget search input
+    # update W1 paper results
     def widget01_update_publication_search(_n_global, _n_w1, w1_value, global_val):
         # get trigger source from callback_context.triggered
         triggered_list=callback_context.triggered
@@ -45,7 +44,7 @@ def register(app):
         prevent_initial_call=True,
     )
 
-    # define a function to update global search feedback based on whether a keyword is entered
+    # show hint when global search has no results
     def global_search_empty_hint(_n_explore, global_val):
         keyword=(global_val or "").strip()
         if not keyword:

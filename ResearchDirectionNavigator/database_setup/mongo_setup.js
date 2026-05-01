@@ -15,7 +15,7 @@ db.publications.createIndex(
     { name: "year_index" }
 );
 
-// Create a compound index for keyword name and year.
+// create a compound index for keyword name and year.
 // This helps when we first search by keyword and then group the matched papers by year.
 db.publications.createIndex(
     { "keywords.name": 1, year: 1 },

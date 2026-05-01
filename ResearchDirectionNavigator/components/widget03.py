@@ -1,7 +1,7 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 
-# create a function to covert the query information into a Dash component
+# W3 comparison table UI
 def make_comparisions_among_universities_for_widget_03(rows):
     # check if there's data or not
     # if no data
@@ -56,8 +56,7 @@ def make_comparisions_among_universities_for_widget_03(rows):
         table_with_frame,
     ])
 
-# define a function to builds the layout of Widget 03 in the dashboard
-# the column for widget 3 is about the university comparison
+# W3 column layout
 # same source as W2: options for the multi-select comparison dropdown (independent variable name for W3).
 def build_column_widget03(dropdown_options):
     return dbc.Col(
@@ -67,7 +66,7 @@ def build_column_widget03(dropdown_options):
                 children=[
                     html.Span(
                         "UNIVERSITY COMPARISONS",
-                        className="section-label section-label-university",
+                        className="section-label section-label-purple",
                     )
                 ],
             ),

@@ -21,20 +21,24 @@ from services.trend_service import widget05_initial_results_children
 from services.university_service import get_university_dropdown_options
 
 """
-this function is responsible for building the main layout of the dashboard, which includes a header, 
-a sidebar for navigation, and a main content area where different pages will be displayed based on user interaction. 
-it constructs the middle area of the page, including multiple columns and rows, to organize the content effectively.
-each widge t is placed within a specific column and row to ensure a clean and responsive design.
+
+This file builds the main dashboard layout. 
+It includes a top navigation bar. 
+It also a title section with the global keyword search.
+
+Each widget is placed in a specific row and a specific column. 
+This layout keeps the page clean. This layout also supports a responsive design.
+
 
 the layout is:
 
-# Row 1 W1 Keyword Publication Search        |  W8 Related Keywords
+# Row 1 W1 Keyword Publication Search        |  W8 Favorite Publications
 # Row 2 W2 University Profile                |  W3 University Comparison
 # Row 3 W7 Collaboration Network             |  W9 Favorite Professors            | W10 OpenAlex
 # Row 4 W5 Research Trends                   |  W6 Faculty Recommendation
 
 """
-# construct a function for the main layout 
+# dashboard middle area (4 rows)
 def build_dashboard_layout():
     # the first row contains widget 1 and widget 8
     # the widge 1 is placed in the first column and the widget 8 is placed in the second column
@@ -44,15 +48,15 @@ def build_dashboard_layout():
 
     # place the two columns in the first row
     first_row_for_widget01_and_widget08=dbc.Row(
-        children=[ column_for_widget01, column_for_widget08],
+        children=[column_for_widget01, column_for_widget08],
         className="g-3",
     )
     
     # the second row contains widget 2 and widget 3
-    # the widget 2 is placed in the first column and the widget 3 is placed in the second column
-    # load university list for W2 dropdown only. W3 loads the same list again below so each widget block stays self-contained 
+    # load university list for W2 dropdown only. 
+    # W3 loads the same list again below so each widget block stays self-contained 
     dropdown_options_for_widget02_and_widget03=get_university_dropdown_options()
-
+    # the widget 2 is placed in the first column and the widget 3 is placed in the second column
     column_for_widget02=build_column_widget02(dropdown_options_for_widget02_and_widget03)
     column_for_widget03=build_column_widget03(dropdown_options_for_widget02_and_widget03)
 
@@ -101,7 +105,7 @@ def build_dashboard_layout():
     # return the main content area to be used in the overall layout of the dashboard
     return main_container_area_for_all_rows
 
-# create a function to build the full layout
+# put all sections together
 def build_full_app_layout():
     # build the main visible sections of the page
     page_sections=[
@@ -112,74 +116,11 @@ def build_full_app_layout():
     ]
     # build Widget 04 extra components
     widget04_store, widget04_off_canvas_bar=create_layout_for_widget04()
-    # create a hidden placeholder button for Widget 04 pattern-matching callbacks
-    w4_pattern_placeholder=html.Div(
-        [
-            dbc.Button(
-                id={"type": "w4-open-faculty", "index": -999999},
-                n_clicks=0,
-                style={"display": "none"},
-                title="",
-            )
-        ],
-        style={"display": "none"},
-    )
-    # create hidden placeholder buttons for Widget 09 pattern-matching callbacks
-    w9_pattern_placeholder=html.Div(
-        [
-            dbc.Button(
-                id={"type": "w9-add-fav", "index": -999999},
-                n_clicks=0,
-                style={"display": "none"},
-            ),
-            dbc.Button(
-                id={"type": "w9-remove-fav", "index": -999999},
-                n_clicks=0,
-                style={"display": "none"},
-            ),
-        ],
-        style={"display": "none"},
-    )
-    # create hidden placeholder controls for Widget 08 pattern-matching callbacks
-    w8_pattern_placeholder=html.Div(
-        [
-            dbc.Button(
-                id={"type": "w8-add-pub", "index": "__placeholder__"},
-                n_clicks=0,
-                style={"display": "none"},
-            ),
-            dbc.Button(
-                id={"type": "w8-remove-pub", "index": "__placeholder__"},
-                n_clicks=0,
-                style={"display": "none"},
-            ),
-            dbc.Button(
-                id={"type": "w8-update-pub", "index": "__placeholder__"},
-                n_clicks=0,
-                style={"display": "none"},
-            ),
-            dcc.Textarea(
-                id={"type": "w8-note", "index": "__placeholder__"},
-                value="",
-                style={"display": "none"},
-            ),
-            dcc.Dropdown(
-                id={"type": "w8-status", "index": "__placeholder__"},
-                options=[],
-                value=None,
-                style={"display": "none"},
-            ),
-        ],
-        style={"display": "none"},
-    )
     return html.Div(
         children=[
             html.Div(children=page_sections),
             widget04_store,
             widget04_off_canvas_bar,
-            w4_pattern_placeholder,
-            w8_pattern_placeholder,
-            w9_pattern_placeholder,
         ],
         className="app-container",
     )

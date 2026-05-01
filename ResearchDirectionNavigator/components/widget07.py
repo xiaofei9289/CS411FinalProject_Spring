@@ -3,7 +3,7 @@ import dash_bootstrap_components as dbc
 import math
 import plotly.graph_objects as go
 
-from services.collaboration_service import neo4j_faculty_id_to_mysql_id
+from utils.common import neo4j_faculty_id_to_mysql_id
 
 
 def get_widget07_initial_results_children():
@@ -132,8 +132,7 @@ def build_collaboration_network_graph(center, collaborators):
 
 
 
-# define a function to builds the layout of Widget 07 in the dashboard
-# the column for widget 07 is about the collaboration network
+# W7 column layout
 def build_column_widget07():
     return dbc.Col(
         children=[
@@ -142,7 +141,7 @@ def build_column_widget07():
                 children=[
                     html.Span(
                         "NETWORK & PERSONALIZATION",
-                        className="section-label section-label-network",
+                        className="section-label section-label-purple",
                     )
                 ],
             ),

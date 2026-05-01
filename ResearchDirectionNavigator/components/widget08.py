@@ -1,7 +1,7 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 
-from services.publication_favorite_service import list_favorite_publications
+from utils.mongodb import w08_list_favorite_publications as list_favorite_publications
 
 
 W8_STATUS_OPTIONS=[
@@ -162,10 +162,7 @@ def build_widget08_favorites_list(favorite_rows):
 def get_widget08_initial_favorites():
     return build_widget08_favorites_list(list_favorite_publications())
 
-
-
-# define a function to builds the layout of Widget 08 in the dashboard
-# the column for widget 08 is about the related keywors
+# W8 column layout
 def build_column_widget08():
     return dbc.Col(
         children=[
@@ -174,7 +171,7 @@ def build_column_widget08():
                 children=[
                     html.Span(
                         "SAVE & EDIT PUBLICATIONS",
-                        className="section-label section-label-keyword",
+                        className="section-label section-label-orange",
                     )
                 ],
             ),

@@ -1,13 +1,9 @@
 import mysql.connector
 
-from .core import check_mysql_connection, get_mysql_config
+from .core import get_mysql_config
 
-# w04-create a function to get summary statistics for one faculty (name, university, publication and citation counts)
-def w04_get_faculty_profile_stats(faculty_id: int):
-    # first, check if the mysql connection is successful
-    if not check_mysql_connection():
-        raise ConnectionError("we cannot connect to MySQL database. please check.")
-    # after the connection is successful, run the aggregation query for this faculty
+# W4 faculty stats: name, university, # papers, citations
+def w04_get_faculty_profile_stats(faculty_id):
     fid=int(faculty_id)
     sql="""
         select
@@ -31,12 +27,8 @@ def w04_get_faculty_profile_stats(faculty_id: int):
     return row
 
 
-# w04-create a function to get keyword counts on this faculty's papers, ordered by frequency
-def w04_get_faculty_top_keywords(faculty_id: int, limit: int=15):
-    # first, check if the mysql connection is successful
-    if not check_mysql_connection():
-        raise ConnectionError("we cannot connect to MySQL database. please check.")
-    # after the connection is successful, query top keywords
+# W4 top keywords for this faculty
+def w04_get_faculty_top_keywords(faculty_id, limit=15):
     fid=int(faculty_id)
     lim=max(1, int(limit))
     sql="""
@@ -58,12 +50,8 @@ def w04_get_faculty_top_keywords(faculty_id: int, limit: int=15):
     return rows
 
 
-# w04-create a function to get co-authors on shared papers, ordered by number of shared papers
-def w04_get_faculty_top_collaborators(faculty_id: int, limit: int=10):
-    # first, check if the mysql connection is successful
-    if not check_mysql_connection():
-        raise ConnectionError("we cannot connect to MySQL database. please check.")
-    # after the connection is successful, query collaborators
+# W4 co-authors by # shared papers
+def w04_get_faculty_top_collaborators(faculty_id, limit=10):
     fid=int(faculty_id)
     lim=max(1, int(limit))
     sql="""
@@ -71,7 +59,7 @@ def w04_get_faculty_top_collaborators(faculty_id: int, limit: int=10):
         from faculty_publication fp1
         join faculty_publication fp2
           on fp2.publication_id=fp1.publication_id
-         and fp2.faculty_id <> fp1.faculty_id
+         and fp2.faculty_id<>fp1.faculty_id
         join faculty f2 on f2.id=fp2.faculty_id
         where fp1.faculty_id=%s
         group by f2.id, f2.name
@@ -87,12 +75,8 @@ def w04_get_faculty_top_collaborators(faculty_id: int, limit: int=10):
     return rows
 
 
-# w04-create a function to get representative papers for one faculty, ordered by citations then year
-def w04_get_faculty_representative_papers(faculty_id: int, limit: int=8):
-    # first, check if the mysql connection is successful
-    if not check_mysql_connection():
-        raise ConnectionError("we cannot connect to MySQL database. please check.")
-    # after the connection is successful, query papers
+# W4 best papers by citations then year
+def w04_get_faculty_representative_papers(faculty_id, limit=8):
     fid=int(faculty_id)
     lim=max(1, int(limit))
     sql="""

@@ -1,15 +1,14 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 
-# create a function to display widget 01 description
+# first hint shown in W1
 def get_widget01_initial_results_children():
     widge01_discription=html.P(
             "This area will display search results in a table: title, year, citations, venue, and authors."
-        ),
+        )
     return widge01_discription
 
-# define a function to builds the layout of Widget 01 in the dashboard
-# the column for widget 1 is about the keywords and it accounts for half of the width of the page
+# W1 column layout
 def build_column_widget01():
     return dbc.Col(
         children=[
@@ -18,7 +17,7 @@ def build_column_widget01():
                 children=[
                     html.Span(
                         "PUBLICATION EXPLORATION",
-                        className="section-label section-label-keyword",
+                        className="section-label section-label-blue",
                     )
                 ],
             ),
@@ -84,64 +83,67 @@ def build_column_widget01():
     )
 
 
-# create a function to convert the faculty ID and name strings into a row of clickable author buttons.
+# build row of author buttons
 def authors_cell_for_one_paper(faculty_ids_joined, faculty_names_joined):
-    # faculty_ids_joined / faculty_names_joined: one string per paper from MySQL (group_concat), pieces joined by "||".
-    # split on "||" and strip; two parallel lists — same index means the same author.
-    # check if is none
+    # handle None inputs first.
     if faculty_ids_joined is None:
         faculty_ids_joined=""
     if faculty_names_joined is None:
         faculty_names_joined=""
-    # split  concatenated string by using "||"
-    faculty_id_str_list=faculty_ids_joined.split("||")
-    faculty_name_list=faculty_names_joined.split("||")
 
-    # remove the empty value
-    clean_id_list=[]
-    for i in faculty_id_str_list:
-        i=i.strip()
-        if i != "":
-            clean_id_list.append(i)
-    clean_name_list=[]
-    for i in faculty_name_list:
-        clean_name_list.append(i.strip())
+    # split raw strings into two lists.
+    raw_id_list=faculty_ids_joined.split("||")
+    raw_name_list=faculty_names_joined.split("||")
 
-    # if no author
-    if not faculty_id_str_list:
-        return html.Span("(no linked faculty)", className="text-muted small")
-    # create a button list
-    button_list=[]
+    # build a clean author list.
+    valid_author_list=[]
+    for i in range(len(raw_id_list)):
+        one_id_text=raw_id_list[i].strip()
 
-    # iterate each element in the clean_id_list
-    for i in range(len(clean_id_list)):
-        faculty_id_str=clean_id_list[i]
-
-        # check if it is digit
-        if not faculty_id_str.isdigit():
+        # skip empty or invalid ids.
+        if one_id_text=="":
             continue
-        faculty_id=int(faculty_id_str)
+        if not one_id_text.isdigit():
+            continue
 
-        # get the author name
-        if i < len(clean_name_list):
-            author_name=clean_name_list[i]
+        one_faculty_id=int(one_id_text)
+
+        # read name from the same position.
+        if i<len(raw_name_list):
+            one_author_name=raw_name_list[i].strip()
         else:
-            author_name=f"Faculty {faculty_id}"
+            one_author_name=""
 
-        # create the button
-        button=dbc.Button(
-            author_name,
-            id={"type": "w4-open-faculty", "index": faculty_id},
+        # use fallback name when the name is empty.
+        if one_author_name=="":
+            one_author_name=f"Faculty {one_faculty_id}"
+
+        valid_author_list.append(
+            {
+                "faculty_id": one_faculty_id,
+                "author_name": one_author_name,
+            }
+        )
+
+    # show placeholder when no valid author exists.
+    if len(valid_author_list)==0:
+        return html.Span("(no linked faculty)", className="text-muted small")
+
+    # build author buttons.
+    button_list=[]
+    for one_author in valid_author_list:
+        one_button=dbc.Button(
+            one_author["author_name"],
+            id={"type": "w4-open-faculty", "index": one_author["faculty_id"]},
             color="link",
             className="p-0 me-2",
-            n_clicks=0
+            n_clicks=0,
         )
-        button_list.append(button)
-
+        button_list.append(one_button)
 
     return html.Div(button_list, className="d-flex flex-wrap align-items-center")
 
-# create a function to convert the query information into a table
+# build the W1 publication table
 def build_publication_list_for_widget01(publications):
     # if no publication found, return a message to explain
     if not publications:

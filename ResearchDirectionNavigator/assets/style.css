@@ -1,153 +1,199 @@
-/* this is global style*/
-/* set page background color and default text color so the whole app looks clean */
-body { background: #F3F4F8; color: #1F2B3A; }
-/* main container to center all content and keep a max width so layout doesn't stretch too wide */
-.app-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
-
-/* the top bar */
-/* set the navigation bar with blue and use flex to align items horizontally */
-.top-navigation-bar { 
-  background: linear-gradient(90deg,#163A6B,#1E4E8C); 
-  color:#fff; 
-  padding: 12px 24px; 
-  display:flex; 
-  align-items:center; 
-  gap:24px; 
+/* basic page style */
+body {
+  background: #F3F4F8;
+  color: #1F2B3A;
+}
+.app-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
-/* brand area (name + tagline), keep it aligned in the top bar */
-.app-brand { 
-  display:flex; 
+/* top menu */
+.top-navigation-bar {
+  background: #163A6B;
+  color: #fff;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.app-brand {
+  display: flex;
   flex-direction: column;
   justify-content: center;
-  gap:10px; 
-  font-weight:700; 
+  gap: 10px;
+  font-weight: 700;
 }
 
-/* brand name (first line inside logo area) */
-.app-brand-name { 
-  font-size: 16px; 
-  font-weight: 700; 
-  line-height: 1.1; 
+.app-brand-name {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.1;
 }
 
-/* small tagline under brand name (second line) */
-.app-brand-tag { 
-  font-size: 11px; 
-  opacity: 0.75; 
-  margin-top: 2px; 
+.app-brand-tag {
+  font-size: 11px;
+  opacity: 0.75;
+  margin-top: 2px;
 }
 
-/* keep right-side area (avatar / user icon) pushed to the far right */
-.nav-right { 
-  margin-left: auto; 
-  font-size: 18px; 
+.nav-right {
+  margin-left: auto;
+  font-size: 18px;
 }
 
-/* style for selected navigation item, make it look like a pill button */
-.nav-pill-selected { 
-  background: rgba(255,255,255,.15); 
-  border-radius: 999px; 
-  padding: 6px 14px; 
+.nav-pill-selected {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  padding: 6px 14px;
 }
 
-/* ===== title section (top intro + global search) ===== */
-/* big top banner area, use light gradient and rounded corners to make it soft */
-.title-section { 
-  background: linear-gradient(135deg,#E8F1FB,#F3F7FD); 
-  border-radius: 18px; 
-  padding: 28px 32px; 
-  margin: 18px 0 28px; 
-  position: relative; 
+/* big title box */
+.title-section {
+  background: #E8F1FB;
+  border-radius: 18px;
+  padding: 28px 32px;
+  margin: 18px 0 28px;
+  position: relative;
 }
 
-/* main title text, make it bigger and bold */
-.hero-title  { 
-  font-size: 28px; 
-  font-weight: 700; 
+.hero-title {
+  font-size: 28px;
+  font-weight: 700;
 }
 
-/* subtitle under the title, use lighter color so it is less strong */
-.hero-subtitle { 
-  color:#4a5a70; 
-  margin-top:6px; 
+.hero-subtitle {
+  color: #4a5a70;
+  margin-top: 6px;
 }
 
-/* small blue badge for "Global Search", rounded pill */
-.global-search-badge { 
-  background:#2F6FE5; 
-  color:#fff; 
-  font-size:11px; 
-  font-weight:700; 
-  border-radius:999px; 
-  padding:4px 10px; 
+.global-search-badge {
+  background: #2F6FE5;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 4px 10px;
 }
 
-/* ===== section labels ===== */
-/* small label to show different sections (like category tags above widgets) */
-.section-label { 
-  display:inline-block; 
-  font-size:11px; 
-  font-weight:700; 
-  padding:4px 10px; 
-  border-radius:6px; 
-  margin: 18px 0 10px; 
+.section-label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin: 18px 0 10px;
 }
 
-/* W5 uses this (analytics area) */
-.section-label-analytics { background:#F0E9FA; color:#5A3EA0; }
-
-/* W10 uses this (external data area) */
-.section-label-external  { background:#E8EFF7; color:#2C4B7A; }
-
-/* wrapper above every widget card. keeps both columns' cards aligned 
-   even if only one side shows a section label */
-.section-label-row { 
-  min-height: 26px; 
-  margin: 10px 0 6px 2px; 
-  display: flex; 
-  align-items: center; 
+.section-label-analytics {
+  background: #F0E9FA;
+  color: #5A3EA0;
 }
 
-/* when the label sits inside .section-label-row, cancel its own top margin 
-   so vertical spacing stays consistent with the empty-label case */
-.section-label-row .section-label { 
-  margin: 0; 
+.section-label-external {
+  background: #E8EFF7;
+  color: #2C4B7A;
 }
 
-/* different colors for different types of sections */
-.section-label-core       { background:#E8F7EC; color:#2E7D4F; }
-.section-label-keyword    { background:#E6EFFA; color:#2C5AA0; }
-.section-label-university { background:#E3F3F1; color:#1F6F6A; }
-.section-label-network    { background:#EDE8F7; color:#5A3EA0; }
+/* keep two sides same start */
+.section-label-row {
+  min-height: 26px;
+  margin: 10px 0 6px 2px;
+  display: flex;
+  align-items: center;
+}
 
+.section-label-row .section-label {
+  margin: 0;
+}
 
-/* ===== widget cards ===== */
-/* base card style for each widget, white background with shadow to separate from page */
+.section-label-core {
+  background: #E8F7EC;
+  color: #2E7D4F;
+}
+.section-label-keyword {
+  background: #E6EFFA;
+  color: #2C5AA0;
+}
+.section-label-publication {
+  background: #FFF1E3;
+  color: #E18A3B;
+}
+.section-label-university {
+  background: #E3F3F1;
+  color: #1F6F6A;
+}
+.section-label-network {
+  background: #EDE8F7;
+  color: #5A3EA0;
+}
+.section-label-blue {
+  background: #E6EFFA;
+  color: #2F6FE5;
+}
+.section-label-teal {
+  background: #E6F7F5;
+  color: #1F8F88;
+}
+.section-label-purple {
+  background: #F0E9FA;
+  color: #8659D7;
+}
+.section-label-green {
+  background: #E8F7EC;
+  color: #3CA672;
+}
+.section-label-orange {
+  background: #FFF1E3;
+  color: #E18A3B;
+}
+.section-label-yellow {
+  background: #FFF6DA;
+  color: #C89606;
+}
+.section-label-pink {
+  background: #FCE8F1;
+  color: #D95A8C;
+}
+
+/* widget card */
 .widget-card {
-    background:#fff;
-    border-radius: 14px;
-    padding: 20px 22px;
-    border: 2px solid #dce2eb;      
-    box-shadow: 0 2px 8px rgba(16,30,54,.04);
-    margin-bottom: 16px;
-    position: relative;
-    /* fill the Bootstrap column so left/right cards share the same width */
-    width: 100%;
-    box-sizing: border-box;
-    min-width: 0;
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px 22px;
+  border: 2px solid #dce2eb;
+  box-shadow: 0 2px 8px rgba(16, 30, 54, 0.04);
+  margin-bottom: 16px;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
 }
 
-/* different accent colors for different widgets */
-.widget-card.accent-green  { border-color:#3CA672; }
-.widget-card.accent-purple { border-color:#8659D7; }
-.widget-card.accent-blue   { border-color:#2F6FE5; }
-.widget-card.accent-teal   { border-color:#1F8F88; }
-.widget-card.accent-orange { border-color:#E18A3B; }
-.widget-card.accent-yellow { border-color:#E9BA2B; }
-.widget-card.accent-pink   { border-color:#D95A8C; }
+.widget-card.accent-green {
+  border-color: #3CA672;
+}
+.widget-card.accent-purple {
+  border-color: #8659D7;
+}
+.widget-card.accent-blue {
+  border-color: #2F6FE5;
+}
+.widget-card.accent-teal {
+  border-color: #1F8F88;
+}
+.widget-card.accent-orange {
+  border-color: #E18A3B;
+}
+.widget-card.accent-yellow {
+  border-color: #E9BA2B;
+}
+.widget-card.accent-pink {
+  border-color: #D95A8C;
+}
 
-/* Same row: all columns stretch to the tallest one; widget-card fills the column */
 .dashboard-main .row {
   align-items: stretch;
 }
@@ -161,30 +207,25 @@ body { background: #F3F4F8; color: #1F2B3A; }
   min-height: 0;
 }
 
-
-/* ===== widget title ===== */
-/* small tag like "W1", just to label widget number */
-.widget-tag  { 
-  background:#2C3E50; 
-  color:#fff; 
-  border-radius:4px; 
-  padding:2px 8px; 
-  font-size:12px; 
-  margin-right:8px; 
+.widget-tag {
+  background: #2C3E50;
+  color: #fff;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 12px;
+  margin-right: 8px;
 }
 
-/* container for title row, keep items aligned in one row */
-.widget-title-row { 
-  display:flex; 
-  align-items:center; 
-  gap:6px; 
+.widget-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   margin-bottom: 6px;
   flex-wrap: wrap;
   min-width: 0;
 }
 
-/* Equal column widths at md+ breakpoint (override content-based flex shrink).
-   md-6 → 50/50, md-4 → 33.33 each, md-7/md-5 → ~58.33% / 41.67% */
+/* fix bootstrap width here */
 @media (min-width: 768px) {
   .dashboard-main .row > .col-md-4 {
     flex: 0 0 33.333333%;
@@ -208,47 +249,56 @@ body { background: #F3F4F8; color: #1F2B3A; }
   }
 }
 
-/* small description text under title */
-.widget-subtitle { 
-  color:#6B7A90; 
-  font-size:13px; 
-  margin-bottom: 12px; 
+.widget-subtitle {
+  color: #6B7A90;
+  font-size: 13px;
+  margin-bottom: 12px;
 }
 
-
-/* ===== tech badges ===== */
-/* small rounded label to show which technology is used */
-.tech-badge { 
-  font-size:11px; 
-  padding:2px 8px; 
-  border-radius:999px; 
-  background:#EEF1F6; 
-  color:#2C3E50; 
+/* small db labels */
+.tech-badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #EEF1F6;
+  color: #2C3E50;
 }
 
-/* different background colors for different tech (just for visual difference) */
-.tech-badge.mysql   { background:#EAF5FF; }
-.tech-badge.mongo   { background:#E8F7EC; }
-.tech-badge.neo4j   { background:#F0E8F7; }
-
-.tech-badge.view        { background:#FFF5E0; }
-.tech-badge.index       { background:#E3F3F1; }
-.tech-badge.transaction { background:#FBE8EC; }
-.tech-badge.constraint  { background:#F2E8F7; }
-
-/* highlighted badge, used when want to emphasize something important */
-.tech-badge.highlight   { 
-  background:#FFE7A3; 
-  font-weight:700; 
+.tech-badge.mysql {
+  background: #EAF5FF;
+}
+.tech-badge.mongo {
+  background: #E8F7EC;
+}
+.tech-badge.neo4j {
+  background: #F0E8F7;
 }
 
-/* search / filter row: field first, button immediately to the right */
+.tech-badge.view {
+  background: #FFF5E0;
+}
+.tech-badge.index {
+  background: #E3F3F1;
+}
+.tech-badge.transaction {
+  background: #FBE8EC;
+}
+.tech-badge.constraint {
+  background: #F2E8F7;
+}
+
+.tech-badge.highlight {
+  background: #FFE7A3;
+  font-weight: 700;
+}
+
+/* search box and button */
 .widget-search-inline {
   display: flex;
   align-items: stretch;
   gap: 8px;
   flex-wrap: wrap;
-  margin-bottom: 0.5rem;
+  margin-bottom: 8px;
 }
 .widget-search-inline > .form-control {
   flex: 1 1 0;
@@ -265,13 +315,10 @@ body { background: #F3F4F8; color: #1F2B3A; }
   white-space: nowrap;
 }
 
-/* Single-line input placeholders don't wrap; they may clip when columns narrow — use a slightly smaller placeholder size */
 .widget-search-inline > .form-control::placeholder {
-  font-size: 0.75rem;
-  letter-spacing: -0.015em;
+  font-size: 12px;
 }
 
-/* W1 / W8: search field and button on one row; label is full width; input flex fills the rest */
 label.w1-search-row.widget-search-inline,
 label.w8-search-row.widget-search-inline {
   display: flex !important;
@@ -296,7 +343,6 @@ label.w8-search-row.widget-search-inline {
   flex-shrink: 0;
 }
 
-/* W2: dropdown and "Show University Details" on one row (dropdown lives in the flex-grow wrapper) */
 label.w2-search-row.widget-search-inline {
   display: flex !important;
   flex-direction: row;
@@ -315,7 +361,6 @@ label.w2-search-row.widget-search-inline {
   flex-shrink: 0;
 }
 
-/* Whole row is clickable: empty area focuses the input (label wraps input); buttons keep pointer cursor */
 .search-row-focus {
   cursor: text;
 }
@@ -323,7 +368,7 @@ label.w2-search-row.widget-search-inline {
   cursor: pointer;
 }
 
-/* search buttons: fill + border match widget-card accent border colors */
+/* button colors */
 .btn.button-search-accent-blue {
   background-color: #2F6FE5 !important;
   border-color: #2F6FE5 !important;
@@ -401,7 +446,6 @@ label.w2-search-row.widget-search-inline {
   color: #fff !important;
 }
 
-/* global search: heading row, then full-width input + button (placeholder is single-line) */
 .global-search-block {
   display: flex;
   flex-direction: column;
@@ -425,7 +469,6 @@ label.w2-search-row.widget-search-inline {
   font-size: 14px;
 }
 
-/* input + Explore share one full-width row in the title / global search area */
 .global-search-input-row {
   display: flex;
   align-items: stretch;
@@ -441,31 +484,27 @@ label.w2-search-row.widget-search-inline {
   box-sizing: border-box;
 }
 
-/* Slightly compact placeholder so long examples fit; input shares row with Explore button */
 .global-search-input-row .global-search-input::placeholder {
-  font-size: 0.75rem;
-  letter-spacing: -0.015em;
+  font-size: 12px;
 }
 
 .global-search-input-row .global-search-button {
   flex-shrink: 0;
 }
 
-/* Global Search: when there are no matches, show one hint line under the title-area search field */
 .global-search-feedback {
   margin-top: 6px;
   min-height: 0;
 }
 .global-search-no-results-text {
   color: #6c757d;
-  font-size: 0.875rem;
+  font-size: 14px;
   line-height: 1.4;
 }
 
-/* Footer: project / stack / team / course — compact type, centered */
 .app-footer {
   text-align: center;
-  font-size: 0.6875rem; /* ~11px — compact meta lines */
+  font-size: 11px;
   line-height: 1.5;
 }
 .app-footer > div {

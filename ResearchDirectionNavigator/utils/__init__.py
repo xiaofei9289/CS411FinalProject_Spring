@@ -1,4 +1,3 @@
-# utils package：this package contains utility functions 
-# for the ResearchDirectionNavigator project.
+# utils: helper code for db and api
 
 

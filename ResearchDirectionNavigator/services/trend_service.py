@@ -9,14 +9,12 @@ from utils.mongodb import (
 from utils.mysql import w05_mysql_get_faculty_ids_by_keyword
 from utils.neo4j import w05_neo4j_keywords_ranked_by_faculty_overlap
 
-# define a function to build the initial message for Widget 5
 def widget05_initial_results_children():
     return html.P(
         "After search: (1) bar chart of top overlapping keywords; (2) MongoDB publications per year.",
         className="text-muted small",
     )
 
-# define a function to run the search for Widget 5
 def run_widget05_search(global_text, local_text):
     selected_text=keyword_search_decision_in_diverse_areas(global_text, local_text)
     # if no keyword is given

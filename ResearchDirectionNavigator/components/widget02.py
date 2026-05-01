@@ -2,30 +2,10 @@ from dash import html, dcc
 import dash_bootstrap_components as dbc
 import plotly.express as px
 
-# create a function to get dark-to-light RGB colors for bars to form a smooth gradient
-def gradient_bar_colors(number_of_bars):
-    # define the start color (dark blue) and end color (light green)
-    rgb_dark=(44, 81, 110)
-    rgb_light=(209, 234, 229)
-    # return an empty list if there are no bars
-    if number_of_bars<=0:
-        return []
-    # if there is only one bar, use the dark color only
-    if number_of_bars==1:
-        return [f"rgb({rgb_dark[0]},{rgb_dark[1]},{rgb_dark[2]})"]
-    # create a list to store the gradient colors
-    gradient_colors=[]
-    # generate one color for each bar
-    for i in range(number_of_bars):
-        blend=i/(number_of_bars-1)
-        red=int(rgb_dark[0]+(rgb_light[0]-rgb_dark[0])*blend)
-        green=int(rgb_dark[1]+(rgb_light[1]-rgb_dark[1])*blend)
-        blue=int(rgb_dark[2]+(rgb_light[2]-rgb_dark[2])*blend)
-        gradient_colors.append(f"rgb({red},{green},{blue})")
-    return gradient_colors
+from utils.common import make_gradient_colors
 
 
-# create a function to convert the query information into a Dash component
+# university info UI
 def build_university_list_for_widget02(university_data):
     # check if the input is empyt
     if university_data is None or len(university_data)==0:
@@ -105,7 +85,7 @@ def build_university_list_for_widget02(university_data):
             keyword_labels.append(row.get("keyword_name", ""))
             publication_counts.append(row.get("pub_count", 0))
         # generate color for the bars based on the number of keywords
-        keyword_bar_colors=gradient_bar_colors(len(keyword_labels))
+        keyword_bar_colors=make_gradient_colors(len(keyword_labels))
         # create a bar chart 
         keyword_bar_figure=px.bar(
             x=keyword_labels,
@@ -122,8 +102,7 @@ def build_university_list_for_widget02(university_data):
         chart
     ])
 
-# define a function to builds the layout of Widget 02 in the dashboard
-# the column for widget 2 is about the university research profile
+# W2 column layout
 def build_column_widget02(dropdown_options):
     return dbc.Col(
         children=[
@@ -132,7 +111,7 @@ def build_column_widget02(dropdown_options):
                 children=[
                     html.Span(
                         "UNIVERSITY ANALYSIS",
-                        className="section-label section-label-university",
+                        className="section-label section-label-teal",
                     )
                 ],
             ),

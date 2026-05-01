@@ -2,12 +2,12 @@ from dash import ALL, Input, Output, State, callback_context, html
 from dash.exceptions import PreventUpdate
 
 from components.widget08 import build_widget08_favorites_list, build_widget08_search_results
-from services.publication_favorite_service import (
-    add_favorite_publication,
-    list_favorite_publications,
-    remove_favorite_publication,
-    search_publications_for_favorites,
-    update_favorite_publication,
+from utils.mongodb import (
+    w08_add_favorite_publication_by_id as add_favorite_publication,
+    w08_list_favorite_publications as list_favorite_publications,
+    w08_remove_favorite_publication as remove_favorite_publication,
+    w08_search_publications as search_publications_for_favorites,
+    w08_update_favorite_publication as update_favorite_publication,
 )
 
 
@@ -57,7 +57,7 @@ def register(app):
             raise PreventUpdate
         all_clicks=(add_clicks_list or [])+(remove_clicks_list or [])+(update_clicks_list or [])
         numeric_clicks=[clicks or 0 for clicks in all_clicks]
-        if not numeric_clicks or max(numeric_clicks) < 1:
+        if not numeric_clicks or max(numeric_clicks)<1:
             raise PreventUpdate
 
         if button_type=="w8-add-pub":

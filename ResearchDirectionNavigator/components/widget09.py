@@ -1,9 +1,9 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 
-from services.favorite_service import list_favorites
+from utils.mysql import w09_list_favorites as list_favorites
 
-# create a function to construct the professor search result list
+# W9 search result list
 def build_widget09_search_results(search_result_rows):
     # check if there is result or not
     if not search_result_rows:
@@ -20,7 +20,7 @@ def build_widget09_search_results(search_result_rows):
         university_display_name=candidate_professor_row.get("university_name") or ""
        
        # build the left text block that shows professor name and university name
-        professor_info_block = html.Div(
+        professor_info_block=html.Div(
             [
                 html.Div(
                     professor_display_name,
@@ -33,7 +33,7 @@ def build_widget09_search_results(search_result_rows):
             ]
         )
         # build the add button on the right side
-        add_button = dbc.Button(
+        add_button=dbc.Button(
             "+ Add",
             id={"type": "w9-add-fav", "index": faculty_id},
             color="warning",
@@ -43,7 +43,7 @@ def build_widget09_search_results(search_result_rows):
         )
 
         # build one list item that contains professor info and the add button
-        one_result_item = html.Li(
+        one_result_item=html.Li(
             dbc.Stack(
                 direction="horizontal",
                 gap=2,
@@ -60,7 +60,7 @@ def build_widget09_search_results(search_result_rows):
 
     return html.Ul(search_result_list_items, className="list-unstyled mb-0 small")
 
-# define a function to build the favorite professor list in Widget 9
+# W9 favorite list
 def build_widget09_favorites_list(favorite_rows):
     # check if exist favorite professor
     if not favorite_rows:
@@ -77,7 +77,7 @@ def build_widget09_favorites_list(favorite_rows):
         university_display_name=one_favorite_row.get("university_name") or ""
         
         # build a clickable professor name button
-        professor_name_button = dbc.Button(
+        professor_name_button=dbc.Button(
             professor_display_name,
             id={"type": "w4-open-faculty", "index": favorite_faculty_id},
             color="link",
@@ -86,7 +86,7 @@ def build_widget09_favorites_list(favorite_rows):
         )
 
         # build the left text block for the favorite item
-        favorite_info_block = html.Div(
+        favorite_info_block=html.Div(
             [
                 # clickable professor name
                 professor_name_button,
@@ -97,7 +97,7 @@ def build_widget09_favorites_list(favorite_rows):
             ]
         )
         # build the remove button on the right side
-        remove_button = dbc.Button(
+        remove_button=dbc.Button(
             "×",
             id={"type": "w9-remove-fav", "index": favorite_faculty_id},
             color="danger",
@@ -106,7 +106,7 @@ def build_widget09_favorites_list(favorite_rows):
             n_clicks=0,
         )
         # build one favorite list item
-        one_favorite_item = html.Li(
+        one_favorite_item=html.Li(
             dbc.Stack(
                 # place the professor info and remove button in one horizontal row
                 direction="horizontal",
@@ -123,7 +123,7 @@ def build_widget09_favorites_list(favorite_rows):
         # add this item into the favorite list
         favorite_list_items.append(one_favorite_item)
 
-    favorite_count = len(favorite_rows)
+    favorite_count=len(favorite_rows)
     return html.Div(
         [
             html.P(
@@ -138,16 +138,15 @@ def build_widget09_favorites_list(favorite_rows):
     )
 
 
-# define a function to load the initial favorite list when the page first opens
+# first load of favorites
 def get_widget09_initial_favorites():
-    # read the favorite professor rows from the service layer
-    favorite_rows = list_favorites()
+    # read the favorite professor rows
+    favorite_rows=list_favorites()
 
     # build and return the favorite list UI
     return build_widget09_favorites_list(favorite_rows)
 
-# define a function to builds the layout of Widget 09 in the dashboard
-# the column for widget 9 is about the favorite professors.
+# W9 column layout
 def build_column_widget09():
     return dbc.Col(
         children=[
@@ -156,7 +155,7 @@ def build_column_widget09():
                 children=[
                     html.Span(
                         "SAVE & EDIT INTERESTED PROFESSORS",
-                        className="section-label section-label-network",
+                        className="section-label section-label-yellow",
                     )
                 ],
             ),

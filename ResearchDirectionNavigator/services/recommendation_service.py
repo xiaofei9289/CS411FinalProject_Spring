@@ -1,4 +1,5 @@
 from utils.mongodb import w05_get_research_trends_based_on_publication_numbers_with_year
+from utils.common import pick_first_keyword
 from utils.mysql import w06_get_faculty_candidates_by_topic
 from utils.neo4j import w06_neo4j_faculty_topic_relevance
 
@@ -9,7 +10,7 @@ def run_widget06_recommendation(
     recent_weight,
     citation_weight,
 ):
-    selected_keyword=(topic_text or "").split(",")[0].strip()
+    selected_keyword=pick_first_keyword(topic_text)
     if not selected_keyword:
         return {
             "topic": "",
@@ -62,7 +63,7 @@ def score_faculty_rows(
     citation_weight=float(citation_weight)
     recent_weight=float(recent_weight)
     total_weight=graph_weight+recent_weight+citation_weight
-    if total_weight <= 0:
+    if total_weight<=0:
         total_weight=1.0
     graph_weight/=total_weight
     recent_weight/=total_weight

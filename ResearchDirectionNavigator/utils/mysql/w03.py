@@ -1,31 +1,13 @@
 import mysql.connector
 
-from .core import check_mysql_connection, get_mysql_config
+from .core import get_mysql_config
 
-# w03-create a function to get the relevent information about the comparision among diverse universities
-def w03_get_comparision_information_among_universities(selected_university_names):
-    # first, check if the mysql connection is successful
-    if not check_mysql_connection():
-        raise ConnectionError("we cannot connect to MySQL database. please check.")
-
-    # second check the input
-    # if no university was selected, return an empty list
-    if selected_university_names is None:
+# W3 compare universities
+# input names should already be cleaned/deduped in the service layer
+def w03_get_comparision_information_among_universities(clean_university_names):
+    if not clean_university_names:
         return []
-    # create a list to store the selected university that remove the spaces
-    selected_universites_list_without_space=[]
-    for single_university_name in selected_university_names:
-        # remove the space
-        selected_university_text_without_space=(single_university_name or "").strip()
-        if selected_university_text_without_space=="":
-            continue
-        if selected_university_text_without_space not in selected_universites_list_without_space:
-            selected_universites_list_without_space.append(selected_university_text_without_space)
-    # get the number of selected universities
-    number_of_selected_universities=len(selected_universites_list_without_space)
-    # if only one university was selected, return an empty list
-    if number_of_selected_universities<2:
-        return []
+    number_of_selected_universities=len(clean_university_names)
 
     # fast path: filter university with in (...) — avoids the slow wanted-union + left join plan
     comma_separated_placeholders=", ".join(["%s"]*number_of_selected_universities)
@@ -41,7 +23,7 @@ def w03_get_comparision_information_among_universities(selected_university_names
                 join faculty_publication fp5 on fp5.faculty_id=fac5.id
                 join publication pub5 on pub5.id=fp5.publication_id
                 where fac5.university_id=u.id
-                  and cast(pub5.year as signed) >= year(curdate())-19
+                  and cast(pub5.year as signed)>=year(curdate())-19
             ) as publication_count_last_twenty_years,
             (
                 select coalesce(sum(pub_cite.num_citations), 0)
@@ -62,7 +44,7 @@ def w03_get_comparision_information_among_universities(selected_university_names
 
     db_config=mysql.connector.connect(**get_mysql_config())
     cur=db_config.cursor(dictionary=True)
-    tuple_of_university_names_for_sql=tuple(selected_universites_list_without_space)
+    tuple_of_university_names_for_sql=tuple(clean_university_names)
     cur.execute(sql_query_for_university_comparison, tuple_of_university_names_for_sql)
     results=cur.fetchall()
     cur.close()
@@ -72,7 +54,7 @@ def w03_get_comparision_information_among_universities(selected_university_names
     # get placeholder zeros so W3 still shows a table instead of a false "pick 2+" message
     by_name={row["university_name"]: row for row in results}
     merged=[]
-    for name in selected_universites_list_without_space:
+    for name in clean_university_names:
         if name in by_name:
             merged.append(by_name[name])
         else:

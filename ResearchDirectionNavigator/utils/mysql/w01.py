@@ -1,19 +1,16 @@
 import mysql.connector
 
-from .core import check_mysql_connection, get_mysql_config
+from .core import get_mysql_config
+from utils.common import split_keywords_by_comma
 
-# w01-create a function to search for papers based on paper keywords
-def w01_search_papers_based_on_keywords(keywords: str, limit: int=100):  
-    # first, check if the mysql connection is successful
-    if not check_mysql_connection():
-        raise ConnectionError("we cannot connect to MySQL database. please check.")
-    # after the connection is successful, we can execute the query to search for papers based on keywords
-    # check if the keywords is empty, if it is empty, return an empty list
+# W1 search papers by keyword
+def w01_search_papers_based_on_keywords(keywords, limit=100):
+    # if no input, return empty
     input_text=(keywords or "").strip()
     if not input_text:
         return []
     # if the input text is not empty, we can split the keywords by comma and strip the whitespace
-    keyword_list=[keyword.strip() for keyword in input_text.split(",") if keyword.strip()]
+    keyword_list=split_keywords_by_comma(input_text)
     if not keyword_list:
         return []
 

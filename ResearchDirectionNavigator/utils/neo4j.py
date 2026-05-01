@@ -18,29 +18,9 @@ def get_neo4j_driver():
         )
     return GraphDatabase.driver(uri, auth=(user, password))
 
-
-# W5: count INTERESTED_IN edges from the given faculty nodes to keywords (schema uses FACULTY, INTERESTED_IN, KEYWORD).
-def w05_neo4j_interested_in_stats_for_faculty_ids(list_of_faculty_ids_from_mysql):
-
-    if not list_of_faculty_ids_from_mysql:
-        return {"edge_count": 0, "detail": "no faculty ids from MySQL"}
-
-    driver=get_neo4j_driver()
-    cypher="""
-        MATCH (f:FACULTY)-[r:INTERESTED_IN]->(k:KEYWORD)
-        WHERE f.id IN $ids
-        RETURN count(r) AS cnt
-    """
-    with driver.session(database="academicworld") as session:
-        record=session.run(cypher, ids=list_of_faculty_ids_from_mysql).single()
-        cnt=record["cnt"] if record else 0
-    driver.close()
-    return {"edge_count": cnt}
-
-
 # W5: rank keywords by how many distinct faculty (from the MySQL-filtered id set) share each keyword via INTERESTED_IN.
 def w05_neo4j_keywords_ranked_by_faculty_overlap(neo4j_faculty_ids, cap=500):
-    """Rank keywords by overlap count: more faculty in the set interested in a keyword means higher rank."""
+    # rank keywords by how many faculty share them
     if not neo4j_faculty_ids:
         return []
     driver=get_neo4j_driver()
@@ -121,7 +101,7 @@ def w07_neo4j_collaboration_network(name_text, limit=12):
     driver=get_neo4j_driver()
     cypher="""
         MATCH (center:FACULTY {id: $faculty_id})-[:PUBLISH]-(p:PUBLICATION)-[:PUBLISH]-(coauthor:FACULTY)
-        WHERE coauthor.id <> center.id
+        WHERE coauthor.id<>center.id
         RETURN
             coauthor.id AS faculty_id,
             coauthor.name AS faculty_name,

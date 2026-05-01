@@ -1,17 +1,12 @@
 import mysql.connector
 
-from .core import check_mysql_connection, get_mysql_config
+from .core import get_mysql_config
 
-# w05-create a function to get the relevent information about the research trends
-def w05_mysql_get_faculty_ids_by_keyword(keyword: str, limit: int=500):
-    # first, check if the mysql connection is successful
-    if not check_mysql_connection():
-        raise ConnectionError("we cannot connect to MySQL database. please check.")
-    # check if the keyword is empty, if it is empty, return an empty list
+# W5 faculty ids by keyword
+def w05_mysql_get_faculty_ids_by_keyword(keyword, limit=500):
     input_keywords=(keyword or "").strip()
     if not input_keywords:
         return []
-    # after the connection is successful, query distinct faculty ids whose papers match the keyword pattern
     sql="""
         select distinct f.id
         from faculty f

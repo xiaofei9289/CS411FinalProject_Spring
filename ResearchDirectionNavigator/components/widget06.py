@@ -78,10 +78,9 @@ def build_widget06_recommendation_results(recommendation_payload):
 
 
 
-# define a function to builds the layout of Widget 06 in the dashboard
-# the column for widget 06 is about the smart recommendation
+# W6 column layout
 def build_column_widget06():
-    """W6 column shell: same ids as before so layout and future callbacks stay valid."""
+    # W6 layout
     return dbc.Col(
         children=[
             html.Div(
@@ -89,7 +88,7 @@ def build_column_widget06():
                 children=[
                     html.Span(
                         "CORE DISCOVERY",
-                        className="section-label section-label-core",
+                        className="section-label section-label-green",
                     )
                 ],
             ),

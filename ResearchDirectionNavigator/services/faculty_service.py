@@ -1,5 +1,6 @@
 from dash import html
 
+from utils.common import to_int
 from utils.mysql import (
     w04_get_faculty_profile_stats,
     w04_get_faculty_representative_papers,
@@ -7,7 +8,7 @@ from utils.mysql import (
     w04_get_faculty_top_keywords,
 )
 
-# define a function to get all the profile informtion from the database according to selected faculty id
+# load faculty profile by id
 def get_widget04_faculty_profile(faculty_id):
     # if no faculty id is provided, return none
     if faculty_id is None:
@@ -23,14 +24,14 @@ def get_widget04_faculty_profile(faculty_id):
         "faculty_id": faculty_id,
         "faculty_name": profile_stats.get("faculty_name") or "",
         "university_name": profile_stats.get("university_name") or "",
-        "publication_count": int(profile_stats.get("publication_count") or 0),
-        "total_citations": safe_int(profile_stats.get("total_citations")),
+        "publication_count": to_int(profile_stats.get("publication_count"), default=0),
+        "total_citations": to_int(profile_stats.get("total_citations"), default=0),
         "top_keywords": w04_get_faculty_top_keywords(faculty_id, limit=15),
         "top_collaborators": w04_get_faculty_top_collaborators(faculty_id, limit=10),
         "representative_papers": w04_get_faculty_representative_papers(faculty_id, limit=8),
     }
 
-# defien a function to build the profile content for Widget 4
+# turn store data into profile card
 def build_widget04_profile_response(store_data, renderer):
     # if no faculty is selected
     if not store_data or store_data.get("faculty_id") is None:
@@ -41,14 +42,3 @@ def build_widget04_profile_response(store_data, renderer):
     if not faculty_profile:
         return html.P("Failed to find this faculty.", className="text-danger"), True
     return renderer(faculty_profile), True
-
-
-# define a function to convert a value to integer
-def safe_int(value):
-    # if the value is None
-    if value is None:
-        return 0
-    # if the value is not a number string
-    if not str(value).strip().isdigit():
-        return 0
-    return int(value)

@@ -1,10 +1,8 @@
 from dash import html,dcc
 import dash_bootstrap_components as dbc
 
-# create a header function that constructs the top navigation bar of the app
+# top navigation bar
 def build_top_navigation_bar():
-    # create the main container of the top navigation bar
-    # it will wrap all the content in the top bar
     navigation_bar=html.Div(className="top-navigation-bar", children=[
     # left part
     html.Div(className="app-brand", children=[
@@ -21,8 +19,7 @@ def build_top_navigation_bar():
     return navigation_bar
 
 
-# create a title section function that constructs the homepage main visual area
-# this will integrate a global search portal, allowing users to discover research resources and academic information through keyword queries
+# title section + global search box
 def build_title_and_search_section():
     all_contents=html.Div(className="title-section", children=[
         # main title
@@ -64,8 +61,7 @@ def build_title_and_search_section():
     ])
     return all_contents
 
-# create a function to insert a footer in the bottom to demonstrate the information about
-# semester, project, relevant techniques
+# footer with course / project / tech info
 def build_page_footer_section():
     area_for_footer=html.Footer(
         className="app-footer border-top py-3 mt-3 text-muted text-center",

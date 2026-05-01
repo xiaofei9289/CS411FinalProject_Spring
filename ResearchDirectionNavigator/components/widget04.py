@@ -1,8 +1,9 @@
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 
+from utils.common import to_int
 
-# define a function to create the hidden store and offcanvas container for widget 04
+# W4 hidden store + offcanvas
 def create_layout_for_widget04():
     # create a store to save the currently selected professor
     selected_faculty_store=dcc.Store(id="widget04_selected_professor", data=None)
@@ -21,7 +22,7 @@ def create_layout_for_widget04():
                     id="widget04_profile_content",
                     children=[
                         html.P(
-                            "Click an author name in Widget 1 search results to view the faculty profile.",
+                            "Open a profile from an author name in W1, W6, W7, or W9.",
                             className="text-muted small",
                         ),
                     ],
@@ -32,11 +33,11 @@ def create_layout_for_widget04():
 
     return selected_faculty_store, faculty_profile_offcanvas
 
-# define a function to create a profile card based on receiving data
+# build the W4 profile card
 def build_widget04_profile_card(profile_data):
     # load the number of papers and citations from the profile data
-    publication_count=int(profile_data.get("publication_count") or 0)
-    total_citations=int(profile_data.get("total_citations") or 0)
+    publication_count=to_int(profile_data.get("publication_count"), default=0)
+    total_citations=to_int(profile_data.get("total_citations"), default=0)
 
     # get the keyword, collaborator, and representative paper lists
     keyword_rows=profile_data.get("top_keywords") or []
@@ -73,7 +74,7 @@ def build_widget04_profile_card(profile_data):
         if not collaborator_name:
             continue
         # get the number of shared papers
-        shared_paper_count=int(collaborator_row.get("shared_papers") or 0)
+        shared_paper_count=to_int(collaborator_row.get("shared_papers"), default=0)
         # add them into the list
         collaborator_items.append(
             html.Li(
@@ -95,12 +96,7 @@ def build_widget04_profile_card(profile_data):
         paper_citations=paper_row.get("num_citations")
 
         # convert the number of citations into integers
-        if paper_citations is None:
-            paper_citation_count=0
-        elif str(paper_citations).isdigit():
-            paper_citation_count=int(paper_citations)
-        else:
-            paper_citation_count=0
+        paper_citation_count=to_int(paper_citations, default=0)
 
         # convert the year to display text
         if paper_year is None:

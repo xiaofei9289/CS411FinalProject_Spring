@@ -1,7 +1,7 @@
 from dash import Input, Output, State, html
 
 from components.widget07 import build_widget07_network_results
-from services.collaboration_service import get_widget07_collaboration_network
+from utils.neo4j import w07_neo4j_collaboration_network
 
 
 def register(app):
@@ -17,5 +17,5 @@ def register(app):
                 "Please type a faculty name first, then click Show Network.",
                 className="text-muted small mb-0",
             )
-        network_payload=get_widget07_collaboration_network(faculty_name)
+        network_payload=w07_neo4j_collaboration_network(faculty_name, limit=12)
         return build_widget07_network_results(network_payload)

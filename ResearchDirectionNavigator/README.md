@@ -6,7 +6,13 @@ The project uses MySQL, MongoDB, Neo4j, OpenAlex. The main goal is simple. We ho
 
 ## 1. Demo
 
-Demo Link:
+Video demo (YouTube): [https://www.youtube.com/watch?v=0rfqCjRhDj0](https://www.youtube.com/watch?v=0rfqCjRhDj0)
+
+## Design
+
+The application is structured in three layers. At the top, **Dash** builds the web dashboard: `app.py` starts the server, `layout/main_layout.py` arranges widgets on the page, `components/` defines each widget’s UI, and `callbacks/` connect buttons and inputs to Python logic. The middle layer is **`services/`**, which runs multi-step workflows when one action needs more than one database—for example resolving a keyword across MySQL, Neo4j, and MongoDB for trends or recommendations. The bottom layer is **`utils/`**: parameterized SQL for MySQL, aggregation and CRUD for MongoDB, Cypher for Neo4j, and HTTP calls to OpenAlex. Configuration comes from `.env` via `connection_config` and related helpers.
+
+Data flows from the user to callbacks (and sometimes through `services/`), then into the appropriate store, and back as tables or Plotly figures. The **global search** bar acts as a shared entry point: it can drive publication search, trend analysis, and OpenAlex results together while each widget still has its own controls. **Bootstrap** layout (`dash-bootstrap-components`) plus `assets/style.css` keep the grid readable on different screen sizes.
 
 ## 2. What this app can do
 
@@ -135,14 +141,14 @@ The project includes two extra parts.
 1. OpenAlex search in W10. It can search papers outside the local database.
 2. Some widgets use more than one database. For example, W5 uses MySQL, Neo4j, and MongoDB together.
 
-## Team work
+## Contributions
 
-Fill this before submission:
+CS411 asks for **tasks** and **approximate time** per member. Adjust hours if you track them differently.
 
-| Team member | NetID | Work done | Email |
-|-------------|-----------|------|------|
-| Xiaofei Feng | xfeng18 | We shared the work evenly | xfeng18@illinois.edu |
-| Yuxin Zhang | yuxinz17 | We shared the work evenly | yuxinz17@Illinois.edu |
+| Team member | NetID | Main tasks | Approx. time | Email |
+|-------------|-------|------------|--------------|-------|
+| Xiaofei Feng | xfeng18 | Widgets **W1–W5** | ~30 h | xfeng18@illinois.edu |
+| Yuxin Zhang | yuxinz17 | Widgets **W6–W10** | ~30 h | yuxinz17@Illinois.edu |
 
 ## Notes
 

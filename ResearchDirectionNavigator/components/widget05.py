@@ -310,6 +310,8 @@ def build_column_widget05(initial_children):
                                 "Research Trends",
                                 className="widget-title",
                             ),
+                            html.Span("MySQL", className="tech-badge mysql"),
+                            html.Span("Neo4j", className="tech-badge neo4j"),
                             html.Span("MongoDB", className="tech-badge mongo"),
                         ],
                     ),

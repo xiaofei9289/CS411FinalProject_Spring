@@ -10,9 +10,35 @@ Video demo (YouTube): [https://www.youtube.com/watch?v=0rfqCjRhDj0](https://www.
 
 ## Design
 
-The application is structured in three layers. At the top, **Dash** builds the web dashboard: `app.py` starts the server, `layout/main_layout.py` arranges widgets on the page, `components/` defines each widget’s UI, and `callbacks/` connect buttons and inputs to Python logic. The middle layer is **`services/`**, which runs multi-step workflows when one action needs more than one database—for example resolving a keyword across MySQL, Neo4j, and MongoDB for trends or recommendations. The bottom layer is **`utils/`**: parameterized SQL for MySQL, aggregation and CRUD for MongoDB, Cypher for Neo4j, and HTTP calls to OpenAlex. Configuration comes from `.env` via `connection_config` and related helpers.
+We try to keep the structure simple. We did not put everything in one huge file. Split into folders so when bug happen we know where to look.
 
-Data flows from the user to callbacks (and sometimes through `services/`), then into the appropriate store, and back as tables or Plotly figures. The **global search** bar acts as a shared entry point: it can drive publication search, trend analysis, and OpenAlex results together while each widget still has its own controls. **Bootstrap** layout (`dash-bootstrap-components`) plus `assets/style.css` keep the grid readable on different screen sizes.
+The front end is **Dash**. Run **`app.py`** then you get the website. **`layout/`** control how widgets placed on page. **`components/`** is each widget UI. **`callbacks/`** is when user click button or type text, Python code run.
+
+Some widgets need **several databases together** (example W5 W6). Those messy logic we put in **`services/`**. Usually MySQL first, then Neo4j or Mongo, one by one.
+
+**`utils/`** is only “how to ask database a question”. MySQL we write SQL with `%s`. Mongo we use pymongo. Neo4j we write Cypher. OpenAlex we just send HTTP request. Secret password we put in `.env`, please copy `.env.example` first.
+
+Very rough picture: user do something → callback run → maybe **`services/`** → **`utils/`** → database answer → show table or chart on screen.
+
+Top bar has **global search**. One keyword can update several panels together. Each widget still has own box so you can use separate.
+
+We use **`dash-bootstrap-components`** make layout not ugly. **`assets/style.css`** change color spacing little bit.
+
+## Implementation
+
+Whole project write in **Python**. Web dashboard use **Plotly Dash**. Grid and button style use **Dash Bootstrap Components**. Figure use **Plotly**. Page skin we DIY in **`assets/style.css`**.
+
+How connect backend:
+
+- **MySQL**: Python package **`mysql-connector-python`**. SQL string use **`%s`** same style like MP homework.
+- **MongoDB**: **`pymongo`**. Read trend data from collection. Widget 8 favorite paper also save here (insert update delete).
+- **Neo4j**: official Neo4j driver for Python. We send Cypher as plain text string.
+
+Config file use **`python-dotenv`**. Read `.env` at runtime. Real password never push to GitHub.
+
+Widget 10 **OpenAlex**: we no use fancy SDK. **`urllib.request`** call API enough. JSON parse use Python built-in. Code live in **`utils/openalex.py`**.
+
+If you lost where is code: open **`app.py`** first. **`layout/`** **`components/`** is face. **`callbacks/`** is hook. **`services/`** is combine multi DB. **`utils/`** is low level driver stuff.
 
 ## 2. What this app can do
 

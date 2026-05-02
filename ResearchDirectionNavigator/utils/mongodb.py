@@ -50,7 +50,6 @@ def w05_get_research_trends_based_on_publication_numbers_with_year(keywords, lim
     for ele in publications.aggregate(pipeline):
         rows.append({"year": ele["_id"], "pub_count": ele["pub_count"]})
     mongo_client.close()
-
     return rows[:limit]
 
 # W5 trend data using Neo4j keywords

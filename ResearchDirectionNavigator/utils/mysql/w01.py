@@ -1,6 +1,6 @@
 import mysql.connector
 
-from .core import get_mysql_config
+from .connection_config import get_mysql_config
 from utils.common import split_keywords_by_comma
 
 # W1 search papers by keyword

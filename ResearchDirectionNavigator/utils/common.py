@@ -1,3 +1,4 @@
+from decimal import Decimal
 def split_keywords_by_comma(text):
     cleaned_text=(text or "").strip()
     if not cleaned_text:
@@ -20,6 +21,13 @@ def pick_first_keyword(text):
 def parse_int(value):
     if value is None:
         return None
+    if isinstance(value, Decimal):
+        if not value.is_finite():
+            return None
+        numerator, denominator=value.as_integer_ratio()
+        if denominator!=1:
+            return None
+        return numerator
     if isinstance(value, bool):
         return None
     if isinstance(value, int):

@@ -1,5 +1,5 @@
 import mysql.connector
-from .core import get_mysql_config
+from .connection_config import get_mysql_config
 
 # W2 dropdown options: all university names
 def w02_get_all_university_names():

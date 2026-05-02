@@ -1,6 +1,6 @@
 import mysql.connector
 
-from .core import get_mysql_config
+from .connection_config import get_mysql_config
 
 # W3 compare universities
 # input names should already be cleaned/deduped in the service layer

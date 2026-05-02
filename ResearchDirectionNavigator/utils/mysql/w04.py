@@ -1,6 +1,6 @@
 import mysql.connector
 
-from .core import get_mysql_config
+from .connection_config import get_mysql_config
 
 # W4 faculty stats: name, university, # papers, citations
 def w04_get_faculty_profile_stats(faculty_id):

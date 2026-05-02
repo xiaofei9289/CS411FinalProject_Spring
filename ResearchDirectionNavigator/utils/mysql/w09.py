@@ -1,6 +1,6 @@
 import mysql.connector
 
-from .core import get_mysql_config
+from .connection_config import get_mysql_config
 
 # W9 search faculty by name
 def w09_search_faculty_by_name(name_pattern, limit=15):

@@ -6,7 +6,7 @@ from dash.exceptions import PreventUpdate
 from components.widget04 import build_widget04_profile_card
 from services.faculty_service import build_widget04_profile_response
 
-# w4 callbacks (faculty profile)
+# w4 callbacksf-aculty profile
 def register(app):
     @app.callback(
         Output("widget04_selected_professor", "data"),

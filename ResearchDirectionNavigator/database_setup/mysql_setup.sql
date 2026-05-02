@@ -30,11 +30,11 @@ select
     k.name as keyword_name,
     count(distinct p.id) as pub_count
 from university u
-join faculty f on f.university_id = u.id
-join faculty_publication fp on fp.faculty_id = f.id
-join publication p on p.id = fp.publication_id
-join publication_keyword pk on pk.publication_id = p.id
-join keyword k on k.id = pk.keyword_id
+join faculty f on f.university_id=u.id
+join faculty_publication fp on fp.faculty_id=f.id
+join publication p on p.id=fp.publication_id
+join publication_keyword pk on pk.publication_id=p.id
+join keyword k on k.id=pk.keyword_id
 group by u.id, u.name, k.id, k.name;
 
 -- -----------------------------------------------------------------

@@ -13,23 +13,11 @@ def register(app):
     @app.callback(
         Output("widget_09_search_results", "children"),
         Input("search_widget09_button", "n_clicks"),
-        Input("global_search_input", "value"),
         State("search_widget09", "value"),
         prevent_initial_call=True,
     )
     # search professors 
-    def widget09_search_candidates(_n_clicks, global_search_text, typed_name):
-        # get the source information that triggers the callback
-        triggered_input_source=callback_context.triggered[0]["prop_id"] if callback_context.triggered else ""
-        # if it's triggered by global search
-        if triggered_input_source.startswith("global_search_input"):
-            # if no input in the global search
-            if not (global_search_text or "").strip():
-                return html.P(
-                    "Type a name and click Explore to find candidates to favorite.",
-                    className="text-muted small mb-0",
-                )
-            raise PreventUpdate
+    def widget09_search_candidates(_n_clicks, typed_name):
         # trim spaces among input text
         trimmed_faculty_name=(typed_name or "").strip()
         if not trimmed_faculty_name:

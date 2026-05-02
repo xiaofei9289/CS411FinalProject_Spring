@@ -36,8 +36,16 @@ def create_layout_for_widget04():
 # build the W4 profile card
 def build_widget04_profile_card(profile_data):
     # load the number of papers and citations from the profile data
-    publication_count=to_int(profile_data.get("publication_count"), default=0)
-    total_citations=to_int(profile_data.get("total_citations"), default=0)
+    if profile_data.get("publication_count") is not None:
+        publication_count=profile_data.get("publication_count")
+    else:
+        publication_count=0
+    
+    if profile_data.get("total_citations") is not None:
+        total_citations=profile_data.get("total_citations")
+    else:
+        total_citations=0
+
 
     # get the keyword, collaborator, and representative paper lists
     keyword_rows=profile_data.get("top_keywords") or []
@@ -74,7 +82,10 @@ def build_widget04_profile_card(profile_data):
         if not collaborator_name:
             continue
         # get the number of shared papers
-        shared_paper_count=to_int(collaborator_row.get("shared_papers"), default=0)
+        if collaborator_row.get("shared_papers") is not None:
+            shared_paper_count=collaborator_row.get("shared_papers")
+        else:
+            shared_paper_count=0
         # add them into the list
         collaborator_items.append(
             html.Li(
@@ -96,7 +107,10 @@ def build_widget04_profile_card(profile_data):
         paper_citations=paper_row.get("num_citations")
 
         # convert the number of citations into integers
-        paper_citation_count=to_int(paper_citations, default=0)
+        if paper_citations is not None:
+            paper_citation_count=paper_citations
+        else:
+            paper_citation_count=0
 
         # convert the year to display text
         if paper_year is None:

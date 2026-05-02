@@ -1,6 +1,6 @@
 import mysql.connector
 
-from .core import get_mysql_config
+from .connection_config import get_mysql_config
 
 # W5 faculty ids by keyword
 def w05_mysql_get_faculty_ids_by_keyword(keyword, limit=500):

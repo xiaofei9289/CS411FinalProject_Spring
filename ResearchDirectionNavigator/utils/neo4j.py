@@ -6,7 +6,6 @@ from pathlib import Path
 _ROOT=Path(__file__).resolve().parent.parent
 load_dotenv(_ROOT / ".env")
 # connect to Neo4j using credentials from the local .env file.
-# never hard-code a password here: .env is gitignored, source code is not.
 def get_neo4j_driver():
     uri=os.getenv("NEO4J_URI", "bolt://127.0.0.1:7687")
     user=os.getenv("NEO4J_USER", "neo4j")

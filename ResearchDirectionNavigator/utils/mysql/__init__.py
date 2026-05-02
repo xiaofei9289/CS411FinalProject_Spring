@@ -1,6 +1,6 @@
 # mysql helpers for each widget
 
-from .core import get_mysql_config
+from .connection_config import get_mysql_config
 from .w01 import w01_search_papers_based_on_keywords
 from .w02 import (
     w02_get_all_university_names,

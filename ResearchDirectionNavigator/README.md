@@ -169,7 +169,15 @@ The project includes two extra parts.
 
 ## Contributions
 
-CS411 asks for **tasks** and **approximate time** per member. Adjust hours if you track them differently.
+We met regularly during this project to align on **what to build and how to achieve**. 
+- We brainstormed to pick flows that would be both helpful for potential users, and interesting & challenging enough to build. 
+- We shared our understandings and opinions on technical requirements and extra-credit goals, which inspired each other and sharpened the approach. 
+- As for implementation, we **reviewed and learnt from each other’s code** (callbacks, the shared helpers, and keeping things consistent between widgets). 
+- We also **tested as a team**, with end-to-end test runs, and cross-widget debugging over the iterations.
+
+Work was divided by widgets in the table below, mainly for who led the development, while all the designs and tests passed through both of us.
+
+Per-member breakdown (**tasks** and **approximate time**):
 
 | Team member | NetID | Main tasks | Approx. time | Email |
 |-------------|-------|------------|--------------|-------|
